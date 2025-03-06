@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ICSR Sump</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            margin: 20px;
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+        .card {
+            width: 300px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            padding: 20px;
+            position: relative;
+        }
+        .card-header {
+            background: #007bff;
+            color: white;
+            padding: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 5px 5px 0 0;
+        }
+        .value-box {
+            border: 2px solid #ccc;
+            padding: 10px;
+            font-size: 40px;
+            font-weight: bold;
+            color: #333;
+            min-width: 100px;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        .unit {
+            font-size: 18px;
+            color: #777;
+            margin-top: 5px;
+        }
+        .timestamp {
+            font-size: 12px;
+            color: #777;
+            margin-top: 10px;
+        }
+        .indicator {
+            width: 100px;
+            height: 100px;
+            border-radius: 50px;
+            display: inline-block;
+            margin-top: 10px;
+            background: gray;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="card">
+            <div>
+                <div class="card-header">ICSR Sump - Current Level</div>
+                <div class="value-box" id="water_level_cm">--</div>
+                <div class="unit">cm</div>
+                <div class="value-box" id="water_level_feet">--</div>
+                <div class="unit">Feet & Inches</div>           
+                <div class="timestamp" id="water_level_time">Waiting for updates...</div>
+                <div class="indicator" id="water_level_indicator"></div>
+                <h3>Green - Water level normal</h3>
+                <h3>Yellow - Caution</h3>
+                <h3>Red - Water level low</h3>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const channels = {
+            water_level: { 
+                channelID: "2511342", 
+                apiKey: "IFAV1XCYUFW5Y478", 
+                field: "field1", 
+                isInteger: true, 
+                limits: { warning: 100, danger: 60 } 
+            },
+        };
+
+        let lastValues = {};
+
+        function timeAgo(timestamp) {
+            const now = new Date();
+            const past = new Date(timestamp);
+            const diffMs = now - past;
+            const diffMinutes = Math.floor(diffMs / (1000 * 60));
+            const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+
+            if (diffMinutes < 1) return "Just now";
+            if (diffMinutes < 60) return `${diffMinutes} min ago`;
+            return `${diffHours} hour(s) ago`;
+        }
+
+        function cmToFeetInches(cm) {
+            const inches = cm / 2.54;
+            const feet = Math.floor(inches / 12);
+            const remainingInches = Math.round(inches % 12);
+            return `${feet} ft ${remainingInches} in`;
+        }
+
+        function updateIndicator(sensor, value) {
+            const indicator = document.getElementById(sensor + "_indicator");
+            const limits = channels[sensor].limits;
+
+            if (value <= limits.danger) {
+                indicator.style.background = "red"; // Critical level
+            } else if (value <= limits.warning) {
+                indicator.style.background = "yellow"; // Warning level
+            } else {
+                indicator.style.background = "green"; // Normal level
+            }
+        }
+
+        async function fetchThingSpeakData(sensor, details) {
+            const url = `https://api.thingspeak.com/channels/${details.channelID}/feeds.json?api_key=${details.apiKey}&results=1`;
+
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                const latestFeed = data.feeds[0];
+
+                if (latestFeed) {
+                    let newValue = latestFeed[details.field];
+                    const lastUpdated = latestFeed.created_at;
+
+                    if (newValue !== undefined && newValue !== lastValues[sensor]) {
+                        lastValues[sensor] = newValue;
+                        newValue = parseFloat(newValue);
+
+                        if (details.isInteger) {
+                            newValue = Math.round(newValue);
+                        } else {
+                            newValue = newValue.toFixed(details.precision || 2);
+                        }
+
+                        document.getElementById("water_level_cm").innerText = newValue;
+                        document.getElementById("water_level_time").innerText = "Updated " + timeAgo(lastUpdated);
+
+                        // Convert cm to feet & inches
+                        if (sensor === "water_level") {
+                            document.getElementById("water_level_feet").innerText = cmToFeetInches(newValue);
+                        }
+
+                        // Update the indicator
+                        updateIndicator(sensor, newValue);
+                    }
+                }
+            } catch (error) {
+                console.error(`Error fetching data for ${sensor}:`, error);
+            }
+        }
+
+        function updateAllSensors() {
+            Object.keys(channels).forEach(sensor => fetchThingSpeakData(sensor, channels[sensor]));
+        }
+
+        setInterval(updateAllSensors, 5000); // Update every 5 seconds
+        updateAllSensors();
+    </script>
+
+</body>
+</html>
