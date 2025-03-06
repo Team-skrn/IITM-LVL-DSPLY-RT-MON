@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ThingSpeak Auto-Update</title>
+    <title>ThingSpeak Multi-Channel Display</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -11,13 +11,18 @@
             text-align: center;
             margin: 20px;
         }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
         .card {
             width: 300px;
             background: white;
             border-radius: 8px;
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
             overflow: hidden;
-            margin: auto;
             text-align: center;
         }
         .card-header {
@@ -53,20 +58,48 @@
 </head>
 <body>
 
-    <div class="card">
-        <div class="card-header">PAMPA SUMP CURRENT LEVEL</div>
-        <div class="card-body">
-            <div class="value-box"><span id="water_level">--</span></div>
-            <div class="unit">cm</div>
-            <div class="timestamp">Waiting for updates...</div>
+    <h2>Live Sensor Data</h2>
+
+    <div class="container">
+        <!-- Channel 1 - Water Level -->
+        <div class="card">
+            <div class="card-header">Water Level</div>
+            <div class="card-body">
+                <div class="value-box" id="water_level">--</div>
+                <div class="unit">cm</div>
+                <div class="timestamp" id="water_level_time">Waiting for updates...</div>
+            </div>
+        </div>
+
+        <!-- Channel 2 - Temperature -->
+        <div class="card">
+            <div class="card-header">Temperature</div>
+            <div class="card-body">
+                <div class="value-box" id="temperature">--</div>
+                <div class="unit">°C</div>
+                <div class="timestamp" id="temperature_time">Waiting for updates...</div>
+            </div>
+        </div>
+
+        <!-- Channel 3 - Pressure -->
+        <div class="card">
+            <div class="card-header">Pressure</div>
+            <div class="card-body">
+                <div class="value-box" id="pressure">--</div>
+                <div class="unit">Pa</div>
+                <div class="timestamp" id="pressure_time">Waiting for updates...</div>
+            </div>
         </div>
     </div>
 
     <script>
-        const channelID = "2322174";
-        const apiKey = "9VMWLF58YXMSKZ4O";
-        const field = "field1"; // Update if needed
-        let lastValue = null; // Store last value to detect changes
+        const channels = {
+            pampa_level: { channelID: "2322174", apiKey: "9VMWLF58YXMSKZ4O", field: "field1", isInteger: true },
+            HSB_actuator: { channelID: "2765361", apiKey: "ILE6YKNRNEH0RRAS", field: "field1", precision: 1 },
+            icsr_water: { channelID: "2511342", apiKey: "IFAV1XCYUFW5Y478", field: "field1", precision: 2 }
+        };
+        
+        let lastValues = {};
 
         function timeAgo(timestamp) {
             const now = new Date();
@@ -77,13 +110,13 @@
             const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
 
             if (diffMinutes < 1) return "Just now";
-            if (diffMinutes < 60) return `${diffMinutes} minute(s) ago`;
+            if (diffMinutes < 60) return `${diffMinutes} min ago`;
             if (diffHours < 24) return `${diffHours} hour(s) ago`;
             return `${diffDays} day(s) ago`;
         }
 
-        async function fetchThingSpeakData() {
-            const url = `https://api.thingspeak.com/channels/${channelID}/feeds.json?api_key=${apiKey}&results=1`;
+        async function fetchThingSpeakData(sensor, details) {
+            const url = `https://api.thingspeak.com/channels/${details.channelID}/feeds.json?api_key=${details.apiKey}&results=1`;
 
             try {
                 const response = await fetch(url);
@@ -91,23 +124,40 @@
                 const latestFeed = data.feeds[0];
 
                 if (latestFeed) {
-                    const newValue = latestFeed[field];
-                    const lastUpdated = latestFeed.created_at; // Timestamp from ThingSpeak
+                    let newValue = latestFeed[details.field];
+                    const lastUpdated = latestFeed.created_at;
 
-                    if (newValue !== undefined && newValue !== lastValue) {
-                        lastValue = newValue;
-                        document.getElementById("water_level").innerText = newValue;
-                        document.querySelector(".timestamp").innerText = "Updated " + timeAgo(lastUpdated);
+                    if (newValue !== undefined && newValue !== lastValues[sensor]) {
+                        lastValues[sensor] = newValue;
+
+                        // Convert to number
+                        newValue = parseFloat(newValue);
+
+                        // Check if the value should be an integer or float with precision
+                        if (details.isInteger) {
+                            newValue = Math.round(newValue);
+                        } else {
+                            newValue = newValue.toFixed(details.precision || 2);
+                        }
+
+                        document.getElementById(sensor).innerText = newValue;
+                        document.getElementById(sensor + "_time").innerText = "Updated " + timeAgo(lastUpdated);
                     }
                 }
             } catch (error) {
-                console.error("Error fetching data:", error);
+                console.error(`Error fetching data for ${sensor}:`, error);
             }
         }
 
-        // Check for updates every 5 seconds
-        setInterval(fetchThingSpeakData, 5000);
-        fetchThingSpeakData();
+        function updateAllSensors() {
+            Object.keys(channels).forEach(sensor => {
+                fetchThingSpeakData(sensor, channels[sensor]);
+            });
+        }
+
+        // Fetch data every 5 seconds
+        setInterval(updateAllSensors, 5000);
+        updateAllSensors();
     </script>
 
 </body>
