@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ThingSpeak Multi-Channel Display with Indicator</title>
+    <title>Pampa Sump</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -22,8 +22,8 @@
             background: white;
             border-radius: 8px;
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-            overflow: hidden;
             text-align: center;
+            padding: 20px;
             position: relative;
         }
         .card-header {
@@ -32,23 +32,22 @@
             padding: 10px;
             font-size: 16px;
             font-weight: bold;
-        }
-        .card-body {
-            padding: 20px;
+            border-radius: 5px 5px 0 0;
         }
         .value-box {
             border: 2px solid #ccc;
             padding: 10px;
-            display: inline-block;
             font-size: 40px;
             font-weight: bold;
             color: #333;
             min-width: 100px;
+            display: inline-block;
+            margin-top: 10px;
         }
         .unit {
             font-size: 18px;
             color: #777;
-            margin-top: 10px;
+            margin-top: 5px;
         }
         .timestamp {
             font-size: 12px;
@@ -56,40 +55,43 @@
             margin-top: 10px;
         }
         .indicator {
-            width: 15px;
-            height: 15px;
-            border-radius: 50%;
-            position: absolute;
-            top: 10px;
-            right: 10px;
+            width: 100px;
+            height: 100px;
+            border-radius: 50px;
+            display: inline-block;
+            margin-top: 10px;
             background: gray;
-            border: 2px solid white;
         }
     </style>
 </head>
 <body>
 
-    <h2>Live Sensor Data with Indicators</h2>
-
     <div class="container">
-        <!-- Water Level -->
         <div class="card">
-            <div class="card-header">Pampa sump current water level</div>
-            <div class="indicator" id="water_level_indicator"></div>
-            <div class="card-body">
-                <div class="value-box" id="water_level">--</div>
+            <div>
+                <div class="card-header">Pampa - Current Level</div>
+                <div class="value-box" id="water_level_cm">--</div>
                 <div class="unit">cm</div>
+                <div class="value-box" id="water_level_feet">--</div>
+                <div class="unit">Feet & Inches</div>           
                 <div class="timestamp" id="water_level_time">Waiting for updates...</div>
+                <div class="indicator" id="water_level_indicator"></div>
+                <h3>Green - Water level normal</h3>
+                <h3>Yellow - Caution</h3>
+                <h3>Red - Water level low</h3>
             </div>
-          
         </div>
-
-        
-
+    </div>
 
     <script>
         const channels = {
-            water_level: { channelID: "2322174", apiKey: "9VMWLF58YXMSKZ4O", field: "field1", isInteger: true, limits: { warning: 100, danger: 65 } },
+            water_level: { 
+                channelID: "2322174", 
+                apiKey: "9VMWLF58YXMSKZ4O", 
+                field: "field1", 
+                isInteger: true, 
+                limits: { warning: 100, danger: 60 } 
+            },
         };
 
         let lastValues = {};
@@ -100,12 +102,17 @@
             const diffMs = now - past;
             const diffMinutes = Math.floor(diffMs / (1000 * 60));
             const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
-            const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
 
             if (diffMinutes < 1) return "Just now";
             if (diffMinutes < 60) return `${diffMinutes} min ago`;
-            if (diffHours < 24) return `${diffHours} hour(s) ago`;
-            return `${diffDays} day(s) ago`;
+            return `${diffHours} hour(s) ago`;
+        }
+
+        function cmToFeetInches(cm) {
+            const inches = cm / 2.54;
+            const feet = Math.floor(inches / 12);
+            const remainingInches = Math.round(inches % 12);
+            return `${feet} ft ${remainingInches} in`;
         }
 
         function updateIndicator(sensor, value) {
@@ -135,21 +142,23 @@
 
                     if (newValue !== undefined && newValue !== lastValues[sensor]) {
                         lastValues[sensor] = newValue;
-
-                        // Convert to number
                         newValue = parseFloat(newValue);
 
-                        // Check if the value should be an integer or float with precision
                         if (details.isInteger) {
                             newValue = Math.round(newValue);
                         } else {
                             newValue = newValue.toFixed(details.precision || 2);
                         }
 
-                        document.getElementById(sensor).innerText = newValue;
-                        document.getElementById(sensor + "_time").innerText = "Updated " + timeAgo(lastUpdated);
+                        document.getElementById("water_level_cm").innerText = newValue;
+                        document.getElementById("water_level_time").innerText = "Updated " + timeAgo(lastUpdated);
 
-                        // Update indicator color
+                        // Convert cm to feet & inches
+                        if (sensor === "water_level") {
+                            document.getElementById("water_level_feet").innerText = cmToFeetInches(newValue);
+                        }
+
+                        // Update the indicator
                         updateIndicator(sensor, newValue);
                     }
                 }
@@ -159,13 +168,10 @@
         }
 
         function updateAllSensors() {
-            Object.keys(channels).forEach(sensor => {
-                fetchThingSpeakData(sensor, channels[sensor]);
-            });
+            Object.keys(channels).forEach(sensor => fetchThingSpeakData(sensor, channels[sensor]));
         }
 
-        // Fetch data every 5 seconds
-        setInterval(updateAllSensors, 5000);
+        setInterval(updateAllSensors, 5000); // Update every 5 seconds
         updateAllSensors();
     </script>
 
