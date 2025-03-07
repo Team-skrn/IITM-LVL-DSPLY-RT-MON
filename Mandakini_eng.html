@@ -71,10 +71,10 @@
         <div class="card">
             <div>
                 <div class="card-header">Mandakini Sump<br><br>Current Level</div>
-                <div class="value-box" id="water_level_cm">--</div>
-                <div class="unit">cm</div>
+                <div class="value-box" id="water_level_cm">-- cm</div>
+<!--                 <div class="unit">cm</div> -->
                 <div class="value-box" id="water_level_feet">--</div>
-                <div class="unit">Feet & Inches</div>           
+<!--                 <div class="unit">Feet & Inches</div>            -->
                 <div class="timestamp" id="water_level_time">Waiting for updates...</div>
                 <div class="indicator" id="water_level_indicator"></div>
                 <h3>Green - Water level normal</h3>
@@ -151,7 +151,7 @@
                             newValue = newValue.toFixed(details.precision || 2);
                         }
 
-                        document.getElementById("water_level_cm").innerText = newValue;
+                        document.getElementById("water_level_cm").innerText = `${newValue} cm`;
                         document.getElementById("water_level_time").innerText = "Updated " + timeAgo(lastUpdated);
 
                         // Convert cm to feet & inches
