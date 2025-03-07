@@ -57,11 +57,11 @@
         .indicator {
             width: 100px;
             height: 100px;
-            border-radius:50%;
+            border-radius: 50%;
             display: inline-block;
             margin-top: 10px;
             background: gray;
-            border: 1px solid black; /* Adds a 5px black border */
+            border: 1px solid black;
         }
     </style>
 </head>
@@ -70,16 +70,16 @@
     <div class="container">
         <div class="card">
             <div>
-                <div class="card-header">ICSR Sump<br><br>Current Level</div>
+                <div class="card-header">ICSR Sump<br><br>Current Level</div><br>
                 <div class="value-box" id="water_level_cm">-- cm</div>
 <!--                 <div class="unit">cm</div> -->
                 <div class="value-box" id="water_level_feet">--</div>
-<!--                 <div class="unit">Feet & Inches</div>           
-                <div class="timestamp" id="water_level_time">Waiting for updates...</div> -->
+<!--                 <div class="unit">Feet & Inches</div>            -->
+                <div class="timestamp" id="water_level_time">Waiting for updates...</div>
                 <div class="indicator" id="water_level_indicator"></div>
-                <left><h3>Green  - Water level normal</h3></left>
-                <left><h3>Yellow - Caution</h3></left>
-                <left><h3>Red    - Water level low</h3></left>
+                <h3>Green - Water level normal</h3>
+                <h3>Yellow - Caution</h3>
+                <h3>Red - Water level low</h3>
             </div>
         </div>
     </div>
