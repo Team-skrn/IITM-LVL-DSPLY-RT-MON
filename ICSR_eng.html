@@ -11,11 +11,27 @@
             text-align: center;
             margin: 20px;
         }
+        .back-button {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            padding: 10px 15px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .back-button:hover {
+            background-color: #0056b3;
+        }
         .container {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             gap: 20px;
+            margin-top: 50px;
         }
         .card {
             width: 300px;
@@ -61,8 +77,9 @@
 </head>
 <body>
 
+    <button class="back-button" onclick="goBack()">← Back</button>
+
     <div class="container">
-        <!-- Block for Water Level -->
         <div class="card">
             <div>
                 <h1>ICSR</h1>
@@ -80,12 +97,7 @@
                 <div class="indicator" id="field6_indicator"></div>
             </div>
         </div>
-
-        <!-- Block for Field6 (Additional Sensor) 
-        <div class="card">
-            
-        </div>
-    </div> -->
+    </div>
 
     <script>
         const channels = {
@@ -104,6 +116,10 @@
                 limits: { warning: 50, danger: 30 }
             }
         };
+
+        function goBack() {
+            window.history.back();
+        }
 
         function timeAgo(timestamp) {
             const now = new Date();
