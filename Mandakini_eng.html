@@ -11,11 +11,28 @@
             text-align: center;
             margin: 20px;
         }
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 10px 15px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 1000;
+        }
+        .back-button:hover {
+            background-color: #0056b3;
+        }
         .container {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             gap: 20px;
+            margin-top: 70px; /* To prevent overlap with the back button */
         }
         .card {
             width: 300px;
@@ -44,11 +61,6 @@
             display: inline-block;
             margin-top: 10px;
         }
-        .unit {
-            font-size: 18px;
-            color: #777;
-            margin-top: 5px;
-        }
         .timestamp {
             font-size: 12px;
             color: #777;
@@ -67,14 +79,14 @@
 </head>
 <body>
 
+    <button class="back-button" onclick="goBack()">← Back</button>
+
     <div class="container">
         <div class="card">
             <div>
                 <div class="card-header">Mandakini Sump<br><br>Current Level</div>
                 <div class="value-box" id="water_level_cm">-- cm</div><br>
-<!--                 <div class="unit">cm</div> -->
                 <div class="value-box" id="water_level_feet">--</div>
-<!--                 <div class="unit">Feet & Inches</div>            -->
                 <div class="timestamp" id="water_level_time">Waiting for updates...</div>
                 <div class="indicator" id="water_level_indicator"></div>
                 <h3>Green - Water level normal</h3>
@@ -85,6 +97,10 @@
     </div>
 
     <script>
+        function goBack() {
+            window.history.back();
+        }
+
         const channels = {
             water_level: { 
                 channelID: "2592245", 
