@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ICSR Sump Water Level</title>
+    <title>ICSR Sump Data</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -30,7 +30,7 @@
             background: #007bff;
             color: white;
             padding: 10px;
-            font-size: 25px;
+            font-size: 20px;
             font-weight: bold;
             border-radius: 5px 5px 0 0;
         }
@@ -40,7 +40,6 @@
             font-size: 40px;
             font-weight: bold;
             color: #333;
-            min-width: 100px;
             display: inline-block;
             margin-top: 10px;
         }
@@ -63,17 +62,26 @@
 <body>
 
     <div class="container">
+        <!-- Block for Water Level -->
         <div class="card">
             <div>
-                <h1>ICSR Sump</h1><br>
-                <div class="card-header">Current Level</div>
+                <h1>ICSR</h1>
+                <div class="card-header">Sump Water Level</div>
                 <div class="value-box" id="water_level_cm">-- cm</div><br>
                 <div class="value-box" id="water_level_feet">--</div>
                 <div class="timestamp" id="water_level_time">Waiting for updates...</div>
                 <div class="indicator" id="water_level_indicator"></div>
-                <h3>Green - Water level normal</h3>
-                <h3>Yellow - Caution</h3>
-                <h3>Red - Water level low</h3>
+            </div>
+        </div>
+
+        <!-- Block for Field6 (Additional Sensor) -->
+        <div class="card">
+            <div>
+                <div class="card-header">Terrace Tank Water Level</div>
+                <div class="value-box" id="field6_cm">-- cm</div><br>
+                <div class="value-box" id="field6_feet">--</div>
+                <div class="timestamp" id="field6_time">Waiting for updates...</div>
+                <div class="indicator" id="field6_indicator"></div>
             </div>
         </div>
     </div>
@@ -87,6 +95,13 @@
                 isInteger: true, 
                 limits: { warning: 100, danger: 60 } 
             },
+            field6: {
+                channelID: "2511342",
+                apiKey: "IFAV1XCYUFW5Y478",
+                field: "field6",
+                isInteger: false,
+                limits: { warning: 50, danger: 20 }
+            }
         };
 
         function timeAgo(timestamp) {
@@ -129,7 +144,6 @@
                 const data = await response.json();
                 const feeds = data.feeds;
 
-                // Find the last valid (non-NaN) value
                 let lastValidValue = "--";
                 let lastUpdated = "No updates";
 
@@ -146,14 +160,17 @@
                     if (details.isInteger) {
                         lastValidValue = Math.round(lastValidValue);
                     } else {
-                        lastValidValue = lastValidValue.toFixed(details.precision || 2);
+                        lastValidValue = lastValidValue.toFixed(2);
                     }
 
-                    document.getElementById("water_level_cm").innerText = `${lastValidValue} cm`;
-                    document.getElementById("water_level_time").innerText = "Updated " + timeAgo(lastUpdated);
-
                     if (sensor === "water_level") {
+                        document.getElementById("water_level_cm").innerText = `${lastValidValue} cm`;
                         document.getElementById("water_level_feet").innerText = cmToFeetInches(lastValidValue);
+                        document.getElementById("water_level_time").innerText = "Updated " + timeAgo(lastUpdated);
+                    } else if (sensor === "field6") {
+                        document.getElementById("field6_cm").innerText = `${lastValidValue} cm`;
+                        document.getElementById("field6_feet").innerText = cmToFeetInches(lastValidValue);
+                        document.getElementById("field6_time").innerText = "Updated " + timeAgo(lastUpdated);
                     }
 
                     updateIndicator(sensor, lastValidValue);
