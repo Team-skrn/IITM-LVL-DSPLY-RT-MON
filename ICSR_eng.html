@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ICSR Sump Data</title>
+    <title>IITM ICSR</title>
+    <!-- Load Google Charts Library -->
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -11,28 +13,36 @@
             text-align: center;
             margin: 20px;
         }
-        .back-button {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            padding: 10px 15px;
-            font-size: 16px;
+        .header {
             background-color: #007bff;
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        .back-button {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            padding: 8px 15px;
+            font-size: 16px;
+            background-color: rgba(255, 255, 255, 0.2);
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            z-index: 1000;
+            display: flex;
+            align-items: center;
         }
         .back-button:hover {
-            background-color: #0056b3;
+            background-color: rgba(255, 255, 255, 0.3);
         }
         .container {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             gap: 20px;
-            margin-top: 70px; /* Increased margin to avoid overlap */
         }
         .card {
             width: 300px;
@@ -41,7 +51,7 @@
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
             text-align: center;
             padding: 20px;
-            position: relative;
+            margin-bottom: 20px;
         }
         .card-header {
             background: #007bff;
@@ -74,52 +84,186 @@
             background: gray;
             border: 1px solid black;
         }
+        .section-header {
+            width: 100%;
+            margin: 20px 0 10px;
+            font-size: 24px;
+            color: #333;
+            text-align: center;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+        }
+        .footer {
+            margin-top: 30px;
+            color: #777;
+            font-size: 14px;
+        }
+          /* Chart styling */
+        #sump_chart_container, #oht_chart_container {
+            position: relative;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+        }
+        
+        #sump_level_chart, #oht_level_chart {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .chart-legend {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
+        
+        .chart-legend-item {
+            display: flex;
+            align-items: center;
+            margin: 0 10px;
+            font-size: 12px;
+        }
+        
+        .chart-legend-color {
+            width: 12px;
+            height: 12px;
+            margin-right: 5px;
+            border-radius: 2px;
+        }
+        
+        .indicator {
+            transition: all 0.5s ease;
+            position: relative;
+        }
+        
+        .indicator::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            height: 80%;
+            border-radius: 50%;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .indicator.animated::after {
+            animation: ripple 1.5s infinite;
+            opacity: 1;
+        }
+        
+        @keyframes ripple {
+            0% {
+                width: 80%;
+                height: 80%;
+                opacity: 0.7;
+            }
+            100% {
+                width: 120%;
+                height: 120%;
+                opacity: 0;
+            }
+        }
     </style>
 </head>
 <body>
+    <div class="header">
+        <button class="back-button" onclick="goBack()">← Back</button>
+        <h1>IITM Water Management</h1>
+    </div>
 
-    <button class="back-button" onclick="goBack()">← Back</button>
-
-    <div class="container">
+    <!-- Sensors Section -->
+    <h2 class="section-header">Water Level Monitoring</h2>
+    <div class="container" id="sensors-container">
+        <!-- ICSR Sump Sensor -->
         <div class="card">
-            <div>
-                <h1>ICSR</h1>
-                <div class="card-header">Sump Water Level</div>
-                <div class="value-box" id="water_level_cm">-- cm</div><br>
-                <div class="value-box" id="water_level_feet">--</div>
-                <div class="timestamp" id="water_level_time">Waiting for updates...</div>
-                <div class="indicator" id="water_level_indicator"></div>
+            <div class="card-header">ICSR Sump</div>
+            <div class="value-box" id="ICSR_sump_cm">-- cm</div><br>
+            <div class="value-box" id="ICSR_sump_feet">--</div>
+            <div class="timestamp" id="ICSR_sump_time">Waiting for updates...</div>
+            <div class="indicator" id="ICSR_sump_indicator"></div>
+        </div>
+
+        <!-- ICSR OHT Sensor -->
+        <div class="card">
+            <div class="card-header">ICSR OHT</div>
+            <div class="value-box" id="ICSR_oht_cm">-- cm</div><br>
+            <div class="value-box" id="ICSR_oht_feet">--</div>
+            <div class="timestamp" id="ICSR_oht_time">Waiting for updates...</div>
+            <div class="indicator" id="ICSR_oht_indicator"></div>
+        </div>
+        
+        <!-- ICSR Sump History Graph Card -->
+        <div class="card" style="width: 100%">
+            <div class="card-header">
+                ICSR Sump - History
+                <select id="days-selector" style="float: right; margin-left: 10px; padding: 5px; border-radius: 3px; border: 1px solid #ccc; background: white; color: #333;">
+                    <option value="1">1 Day</option>
+                    <option value="2">2 Days</option>
+                    <option value="3">3 Days</option>
+                    <option value="4">4 Days</option>
+                    <option value="5">5 Days</option>
+                    <option value="6">6 Days</option>
+                    <option value="7">7 Days</option>
+                </select>
             </div>
-            <div>
-                <div class="card-header">Terrace Tank Water Level</div>
-                <div class="value-box" id="field6_cm">-- cm</div><br>
-                <div class="value-box" id="field6_feet">--</div>
-                <div class="timestamp" id="field6_time">Waiting for updates...</div>
-                <div class="indicator" id="field6_indicator"></div>
+            <div id="sump_chart_container" style="height: 300px; width: 100%; margin-top: 20px;">
+                <div id="sump_level_chart"></div>
             </div>
+            <div class="timestamp" id="sump_chart_update_time">Waiting for history data...</div>
+        </div>
+
+        <!-- ICSR OHT History Graph Card -->
+        <div class="card" style="width: 100%">
+            <div class="card-header">
+                ICSR OHT - History
+                <select id="oht-days-selector" style="float: right; margin-left: 10px; padding: 5px; border-radius: 3px; border: 1px solid #ccc; background: white; color: #333;">
+                    <option value="1">1 Day</option>
+                    <option value="2">2 Days</option>
+                    <option value="3">3 Days</option>
+                    <option value="4">4 Days</option>
+                    <option value="5">5 Days</option>
+                    <option value="6">6 Days</option>
+                    <option value="7">7 Days</option>
+                </select>
+            </div>
+            <div id="oht_chart_container" style="height: 300px; width: 100%; margin-top: 20px;">
+                <div id="oht_level_chart"></div>
+            </div>
+            <div class="timestamp" id="oht_chart_update_time">Waiting for history data...</div>
         </div>
     </div>
 
+    
+
+    <div class="footer">
+        <p>© 2025 IITM Water Management System</p>
+    </div>
+
     <script>
-        const channels = {
-            water_level: { 
-                channelID: "2511342", 
-                apiKey: "IFAV1XCYUFW5Y478", 
-                field: "field1", 
-                isInteger: true, 
-                limits: { warning: 100, danger: 60 } 
+        const sensorChannels = {
+            ICSR_sump: {
+                channelID: "2511342",
+                apiKey: "IFAV1XCYUFW5Y478",
+                field: "field1",
+                isInteger: true,
+                limits: { warning: 100, danger: 60 },
+                name: "ICSR Sump"
             },
-            field6: {
+            ICSR_oht: {
                 channelID: "2511342",
                 apiKey: "IFAV1XCYUFW5Y478",
                 field: "field6",
-                isInteger: false,
-                limits: { warning: 50, danger: 30 }
+                isInteger: true,
+                limits: { warning: 50, danger: 30 },
+                name: "ICSR OHT"
             }
         };
 
         function goBack() {
-            window.history.back();
+            window.location.href = "index.html";
         }
 
         function timeAgo(timestamp) {
@@ -143,7 +287,10 @@
 
         function updateIndicator(sensor, value) {
             const indicator = document.getElementById(sensor + "_indicator");
-            const limits = channels[sensor].limits;
+            if (!indicator) return;
+            
+            const limits = sensorChannels[sensor].limits;
+            if (!limits) return;
 
             if (value <= limits.danger) {
                 indicator.style.background = "red";
@@ -154,19 +301,39 @@
             }
         }
 
-        async function fetchThingSpeakData(sensor, details) {
-            const url = `https://api.thingspeak.com/channels/${details.channelID}/feeds.json?api_key=${details.apiKey}&results=10`;
+        async function fetchThingSpeakData(entityId, details) {
+            const url = `https://api.thingspeak.com/channels/${details.channelID}/feeds.json?api_key=${details.apiKey}&results=20`;
+            console.log(`Fetching data for ${entityId} from channel ${details.channelID} field ${details.field} using API key: ${details.apiKey}`);
 
             try {
-                const response = await fetch(url);
+                const response = await fetch(url, { 
+                    method: 'GET',
+                    cache: 'no-cache'
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                
                 const data = await response.json();
+                
+                if (!data || !data.feeds || data.feeds.length === 0) {
+                    console.warn(`No feeds received for ${entityId}`);
+                    return;
+                }
+                
                 const feeds = data.feeds;
-
                 let lastValidValue = "--";
                 let lastUpdated = "No updates";
-
+                
                 for (let i = feeds.length - 1; i >= 0; i--) {
-                    let value = parseFloat(feeds[i][details.field]);
+                    let rawValue = feeds[i][details.field];
+                    
+                    if (rawValue === null || rawValue === undefined || rawValue === "") {
+                        continue;
+                    }
+                    
+                    let value = parseFloat(rawValue);
                     if (!isNaN(value)) {
                         lastValidValue = value;
                         lastUpdated = feeds[i].created_at;
@@ -175,36 +342,309 @@
                 }
 
                 if (lastValidValue !== "--") {
-                    if (details.isInteger) {
-                        lastValidValue = Math.round(lastValidValue);
-                    } else {
-                        lastValidValue = lastValidValue.toFixed(2);
+                    const isSensor = sensorChannels[entityId] !== undefined;
+                    
+                    const formattedValue = (isSensor && details.isInteger) ? 
+                        Math.round(lastValidValue) : 
+                        parseFloat(lastValidValue).toFixed(2);
+                    
+                    if (isSensor) {
+                        const cmElement = document.getElementById(entityId + "_cm");
+                        const feetElement = document.getElementById(entityId + "_feet");
+                        const timeElement = document.getElementById(entityId + "_time");
+                        
+                        if (cmElement) cmElement.innerText = `${formattedValue} cm`;
+                        if (feetElement) feetElement.innerText = cmToFeetInches(formattedValue);
+                        if (timeElement) timeElement.innerText = "Updated " + timeAgo(lastUpdated);
+                        
+                        updateIndicator(entityId, formattedValue);
                     }
-
-                    if (sensor === "water_level") {
-                        document.getElementById("water_level_cm").innerText = `${lastValidValue} cm`;
-                        document.getElementById("water_level_feet").innerText = cmToFeetInches(lastValidValue);
-                        document.getElementById("water_level_time").innerText = "Updated " + timeAgo(lastUpdated);
-                    } else if (sensor === "field6") {
-                        document.getElementById("field6_cm").innerText = `${lastValidValue} cm`;
-                        document.getElementById("field6_feet").innerText = cmToFeetInches(lastValidValue);
-                        document.getElementById("field6_time").innerText = "Updated " + timeAgo(lastUpdated);
-                    }
-
-                    updateIndicator(sensor, lastValidValue);
                 }
             } catch (error) {
-                console.error(`Error fetching data for ${sensor}:`, error);
+                console.error(`Error fetching data for ${entityId}:`, error);
             }
         }
 
-        function updateAllSensors() {
-            Object.keys(channels).forEach(sensor => fetchThingSpeakData(sensor, channels[sensor]));
+        function updateAllData() {
+            Object.keys(sensorChannels).forEach(sensor => 
+                fetchThingSpeakData(sensor, sensorChannels[sensor])
+            );
+        }        // Load Google Charts and set up the time series charts
+        google.charts.load('current', {'packages':['corechart']});
+        google.charts.setOnLoadCallback(initializeCharts);
+        
+        let sumpChart, ohtChart;
+        let sumpChartData, ohtChartData;
+
+        function initializeCharts() {
+            // Initialize Sump Chart
+            sumpChartData = new google.visualization.DataTable();
+            sumpChartData.addColumn('datetime', 'Time');
+            sumpChartData.addColumn('number', 'ICSR Sump (cm)');
+            sumpChartData.addColumn({type: 'string', role: 'tooltip'});
+            
+            const sumpChartOptions = {
+                title: 'ICSR Sump Water Level History',
+                titleTextStyle: { 
+                    color: '#333',
+                    fontSize: 14,
+                    bold: true
+                },
+                legend: { position: 'bottom' },
+                hAxis: {
+                    title: 'Time',
+                    format: 'HH:mm',
+                    gridlines: { count: 8 }
+                },
+                vAxis: {
+                    title: 'Water Level (cm)',
+                    minValue: 0
+                },
+                colors: ['#007bff'],
+                lineWidth: 3,
+                pointSize: 5,
+                animation: {
+                    startup: true,
+                    duration: 1000,
+                    easing: 'out'
+                }
+            };
+            
+            sumpChart = new google.visualization.LineChart(document.getElementById('sump_level_chart'));
+            sumpChart.draw(sumpChartData, sumpChartOptions);
+
+            // Initialize OHT Chart
+            ohtChartData = new google.visualization.DataTable();
+            ohtChartData.addColumn('datetime', 'Time');
+            ohtChartData.addColumn('number', 'ICSR OHT (cm)');
+            ohtChartData.addColumn({type: 'string', role: 'tooltip'});
+            
+            const ohtChartOptions = {
+                title: 'ICSR OHT Water Level History',
+                titleTextStyle: { 
+                    color: '#333',
+                    fontSize: 14,
+                    bold: true
+                },
+                legend: { position: 'bottom' },
+                hAxis: {
+                    title: 'Time',
+                    format: 'HH:mm',
+                    gridlines: { count: 8 }
+                },
+                vAxis: {
+                    title: 'Water Level (cm)',
+                    minValue: 0
+                },
+                colors: ['#28a745'],
+                lineWidth: 3,
+                pointSize: 5,
+                animation: {
+                    startup: true,
+                    duration: 1000,
+                    easing: 'out'
+                }
+            };
+            
+            ohtChart = new google.visualization.LineChart(document.getElementById('oht_level_chart'));
+            ohtChart.draw(ohtChartData, ohtChartOptions);
+            
+            // Add event listener for days selector
+            document.getElementById('days-selector').addEventListener('change', function() {
+                fetchSumpHistoricalData();
+            });
+            
+            // Add event listener for OHT days selector
+            document.getElementById('oht-days-selector').addEventListener('change', function() {
+                fetchOHTHistoricalData();
+            });
+            
+            // Initial load of both charts
+            fetchSumpHistoricalData();
+            fetchOHTHistoricalData();
+        }
+          async function fetchSumpHistoricalData() {
+            try {
+                // Get channel info from sensor configuration
+                const sumpConfig = sensorChannels.ICSR_sump;
+                
+                // Get selected number of days for sump
+                const selectedDays = parseInt(document.getElementById('days-selector').value) || 1;
+                
+                const endDate = new Date();
+                const startDate = new Date(endDate);
+                startDate.setDate(startDate.getDate() - selectedDays);
+                
+                const startStr = `${startDate.getFullYear()}-${(startDate.getMonth()+1).toString().padStart(2, '0')}-${startDate.getDate().toString().padStart(2, '0')}%20${startDate.getHours().toString().padStart(2, '0')}:${startDate.getMinutes().toString().padStart(2, '0')}:${startDate.getSeconds().toString().padStart(2, '0')}`;
+                const endStr = `${endDate.getFullYear()}-${(endDate.getMonth()+1).toString().padStart(2, '0')}-${endDate.getDate().toString().padStart(2, '0')}%20${endDate.getHours().toString().padStart(2, '0')}:${endDate.getMinutes().toString().padStart(2, '0')}:${endDate.getSeconds().toString().padStart(2, '0')}`;
+                
+                const url = `https://api.thingspeak.com/channels/${sumpConfig.channelID}/feeds.json?api_key=${sumpConfig.apiKey}&start=${startStr}&end=${endStr}&results=8000`;
+                
+                const response = await fetch(url, { cache: 'no-cache' });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                if (!data || !data.feeds || data.feeds.length === 0) {
+                    console.warn("No sump historical data received");
+                    document.getElementById('sump_chart_update_time').innerText = "No historical data available";
+                    return;
+                }
+                
+                const dayText = selectedDays === 1 ? 'Day' : 'Days';
+                const sumpRows = [];
+                
+                data.feeds.forEach(feed => {
+                    const date = new Date(feed.created_at);
+                    const sumpValue = feed[sumpConfig.field] ? parseFloat(feed[sumpConfig.field]) : null;
+                    
+                    if (sumpValue !== null) {
+                        const formattedDate = new Date(date);
+                        const sumpTooltip = `${formattedDate.toLocaleDateString()} ${formattedDate.toLocaleTimeString()}\nSump: ${Math.round(sumpValue)} cm`;
+                        sumpRows.push([formattedDate, sumpValue, sumpTooltip]);
+                    }
+                });
+                
+                // Update Sump Chart
+                sumpChartData.removeRows(0, sumpChartData.getNumberOfRows());
+                sumpChartData.addRows(sumpRows);
+                
+                const sumpOptions = {
+                    title: `ICSR Sump Water Level History (${selectedDays} ${dayText})`,
+                    titleTextStyle: { 
+                        color: '#333',
+                        fontSize: 14,
+                        bold: true
+                    },
+                    legend: { position: 'bottom' },
+                    hAxis: {
+                        title: 'Time',
+                        format: selectedDays === 1 ? 'HH:mm' : 'MM/dd HH:mm',
+                        gridlines: { count: 8 }
+                    },
+                    vAxis: {
+                        title: 'Water Level (cm)',
+                        minValue: 0
+                    },
+                    colors: ['#007bff'],
+                    lineWidth: 3,
+                    pointSize: 5,
+                    animation: {
+                        duration: 1000,
+                        easing: 'out'
+                    }
+                };
+                
+                sumpChart.draw(sumpChartData, sumpOptions);
+                
+                const currentTime = new Date().toLocaleTimeString();
+                document.getElementById('sump_chart_update_time').innerText = 
+                    `Sump chart updated: ${currentTime} • ${sumpRows.length} data points • ${selectedDays} ${dayText}`;
+                    
+            } catch (error) {
+                console.error("Error fetching sump historical data:", error);
+                document.getElementById('sump_chart_update_time').innerText = 
+                    `Error loading sump chart data: ${error.message}`;
+            }
         }
 
-        setInterval(updateAllSensors, 1000);
-        updateAllSensors();
+          async function fetchOHTHistoricalData() {
+            try {
+                // Get channel info from sensor configuration
+                const ohtConfig = sensorChannels.ICSR_oht;
+                
+                // Get selected number of days for OHT
+                const selectedDays = parseInt(document.getElementById('oht-days-selector').value) || 1;
+                
+                const endDate = new Date();
+                const startDate = new Date(endDate);
+                startDate.setDate(startDate.getDate() - selectedDays);
+                
+                const startStr = `${startDate.getFullYear()}-${(startDate.getMonth()+1).toString().padStart(2, '0')}-${startDate.getDate().toString().padStart(2, '0')}%20${startDate.getHours().toString().padStart(2, '0')}:${startDate.getMinutes().toString().padStart(2, '0')}:${startDate.getSeconds().toString().padStart(2, '0')}`;
+                const endStr = `${endDate.getFullYear()}-${(endDate.getMonth()+1).toString().padStart(2, '0')}-${endDate.getDate().toString().padStart(2, '0')}%20${endDate.getHours().toString().padStart(2, '0')}:${endDate.getMinutes().toString().padStart(2, '0')}:${endDate.getSeconds().toString().padStart(2, '0')}`;
+                
+                const url = `https://api.thingspeak.com/channels/${ohtConfig.channelID}/feeds.json?api_key=${ohtConfig.apiKey}&start=${startStr}&end=${endStr}&results=8000`;
+                
+                const response = await fetch(url, { cache: 'no-cache' });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                if (!data || !data.feeds || data.feeds.length === 0) {
+                    console.warn("No OHT historical data received");
+                    document.getElementById('oht_chart_update_time').innerText = "No historical data available";
+                    return;
+                }
+                
+                const dayText = selectedDays === 1 ? 'Day' : 'Days';
+                const ohtRows = [];
+                
+                data.feeds.forEach(feed => {
+                    const date = new Date(feed.created_at);
+                    const ohtValue = feed[ohtConfig.field] ? parseFloat(feed[ohtConfig.field]) : null;
+                    
+                    if (ohtValue !== null) {
+                        const formattedDate = new Date(date);
+                        const ohtTooltip = `${formattedDate.toLocaleDateString()} ${formattedDate.toLocaleTimeString()}\nOHT: ${Math.round(ohtValue)} cm`;
+                        ohtRows.push([formattedDate, ohtValue, ohtTooltip]);
+                    }
+                });
+                
+                // Update OHT Chart
+                ohtChartData.removeRows(0, ohtChartData.getNumberOfRows());
+                ohtChartData.addRows(ohtRows);
+                
+                const ohtOptions = {
+                    title: `ICSR OHT Water Level History (${selectedDays} ${dayText})`,
+                    titleTextStyle: { 
+                        color: '#333',
+                        fontSize: 14,
+                        bold: true
+                    },
+                    legend: { position: 'bottom' },
+                    hAxis: {
+                        title: 'Time',
+                        format: selectedDays === 1 ? 'HH:mm' : 'MM/dd HH:mm',
+                        gridlines: { count: 8 }
+                    },
+                    vAxis: {
+                        title: 'Water Level (cm)',
+                        minValue: 0
+                    },
+                    colors: ['#28a745'],
+                    lineWidth: 3,
+                    pointSize: 5,
+                    animation: {
+                        duration: 1000,
+                        easing: 'out'
+                    }
+                };
+                
+                ohtChart.draw(ohtChartData, ohtOptions);
+                
+                const currentTime = new Date().toLocaleTimeString();
+                document.getElementById('oht_chart_update_time').innerText = 
+                    `OHT chart updated: ${currentTime} • ${ohtRows.length} data points • ${selectedDays} ${dayText}`;
+                    
+            } catch (error) {
+                console.error("Error fetching OHT historical data:", error);
+                document.getElementById('oht_chart_update_time').innerText = 
+                    `Error loading OHT chart data: ${error.message}`;
+            }
+        }
+        
+        updateAllData();
+        setInterval(updateAllData, 1000);
+        setInterval(() => {
+            fetchSumpHistoricalData();
+            fetchOHTHistoricalData();
+        }, 60000);
     </script>
-
 </body>
 </html>
