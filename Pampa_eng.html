@@ -3,13 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pampa Sump</title>
+    <title>IITM Pampa</title>
+    <!-- Load Google Charts Library -->
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
             text-align: center;
             margin: 20px;
+        }
+        .header {
+            background-color: #007bff;
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        .back-button {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            padding: 8px 15px;
+            font-size: 16px;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+        .back-button:hover {
+            background-color: rgba(255, 255, 255, 0.3);
         }
         .container {
             display: flex;
@@ -24,13 +51,13 @@
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
             text-align: center;
             padding: 20px;
-            position: relative;
+            margin-bottom: 20px;
         }
         .card-header {
             background: #007bff;
             color: white;
             padding: 10px;
-            font-size: 25px;
+            font-size: 20px;
             font-weight: bold;
             border-radius: 5px 5px 0 0;
         }
@@ -40,14 +67,8 @@
             font-size: 40px;
             font-weight: bold;
             color: #333;
-            min-width: 100px;
             display: inline-block;
             margin-top: 10px;
-        }
-        .unit {
-            font-size: 18px;
-            color: #777;
-            margin-top: 5px;
         }
         .timestamp {
             font-size: 12px;
@@ -63,39 +84,182 @@
             background: gray;
             border: 1px solid black;
         }
+        .section-header {
+            width: 100%;
+            margin: 20px 0 10px;
+            font-size: 24px;
+            color: #333;
+            text-align: center;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+        }
+        .footer {
+            margin-top: 30px;
+            color: #777;
+            font-size: 14px;
+        }
+        /* Chart styling */
+        #sump_chart_container {
+            position: relative;
+            padding: 5px 2px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        #sump_level_chart {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            min-width: 0;
+        }
+        
+        /* Mobile responsive adjustments */
+        @media (max-width: 768px) {
+            #sump_chart_container {
+                padding: 2px 1px;
+            }
+            
+            .card {
+                padding: 10px !important;
+            }
+            
+            .card-header {
+                font-size: 16px !important;
+                padding: 8px !important;
+                flex-direction: column;
+                gap: 5px;
+            }
+            
+            .card-header select {
+                margin-left: 0 !important;
+                width: 100%;
+                max-width: 120px;
+            }
+        }
+        
+        .chart-legend {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
+        
+        .chart-legend-item {
+            display: flex;
+            align-items: center;
+            margin: 0 10px;
+            font-size: 12px;
+        }
+        
+        .chart-legend-color {
+            width: 12px;
+            height: 12px;
+            margin-right: 5px;
+            border-radius: 2px;
+        }
+        
+        .indicator {
+            transition: all 0.5s ease;
+            position: relative;
+        }
+        
+        .indicator::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            height: 80%;
+            border-radius: 50%;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .indicator.animated::after {
+            animation: ripple 1.5s infinite;
+            opacity: 1;
+        }
+        
+        @keyframes ripple {
+            0% {
+                width: 80%;
+                height: 80%;
+                opacity: 0.7;
+            }
+            100% {
+                width: 120%;
+                height: 120%;
+                opacity: 0;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="header">
+        <button class="back-button" onclick="goBack()">← Back</button>
+        <h1>IITM Water Management</h1>
+    </div>
+
+    <!-- Sensors Section -->
+    <h2 class="section-header">Water Level Monitoring</h2>
+    <div class="container" id="sensors-container">
+        <!-- Pampa Sump Sensor -->
         <div class="card">
-            <div>
-                <h1>Pampa Sump</h1><br><br>
-                <div class="card-header">Current Level</div><br>
-                <div class="value-box" id="water_level_cm">-- cm</div>
-<!--                 <div class="unit">cm</div> -->
-                <div class="value-box" id="water_level_feet">--</div>
-<!--                 <div class="unit">Feet & Inches</div>            -->
-                <div class="timestamp" id="water_level_time">Waiting for updates...</div>
-                <div class="indicator" id="water_level_indicator"></div>
-                <h3>Green - Water level normal</h3>
-                <h3>Yellow - Caution</h3>
-                <h3>Red - Water level low</h3>
-            </div>
+            <div class="card-header">Pampa Sump</div>
+            <div class="value-box" id="Pampa_sump_cm">-- cm</div><br>
+            <div class="value-box" id="Pampa_sump_feet">--</div>
+            <div class="timestamp" id="Pampa_sump_time">Waiting for updates...</div>
+            <div class="indicator" id="Pampa_sump_indicator"></div>
         </div>
+
+
+        
+        <!-- Pampa Sump History Graph Card -->
+        <div class="card" style="width: 100%">
+            <div class="card-header">
+                Pampa Sump - History
+                <select id="days-selector" style="float: right; margin-left: 10px; padding: 5px; border-radius: 3px; border: 1px solid #ccc; background: white; color: #333;">
+                    <option value="1">1 Day</option>
+                    <option value="2">2 Days</option>
+                    <option value="3">3 Days</option>
+                    <option value="4">4 Days</option>
+                    <option value="5">5 Days</option>
+                    <option value="6">6 Days</option>
+                    <option value="7">7 Days</option>
+                </select>
+            </div>
+            <div id="sump_chart_container" style="height: 300px; width: 100%; margin-top: 20px;">
+                <div id="sump_level_chart"></div>
+            </div>
+            <div class="timestamp" id="sump_chart_update_time">Waiting for history data...</div>
+        </div>
+
+
+    </div>
+
+    
+
+    <div class="footer">
+        <p>© 2025 IITM Water Management System</p>
     </div>
 
     <script>
-        const channels = {
-            water_level: { 
-                channelID: "2322174", 
-                apiKey: "9VMWLF58YXMSKZ4O", 
-                field: "field1", 
-                isInteger: true, 
-                limits: { warning: 100, danger: 60 } 
-            },
+        const sensorChannels = {
+            Pampa_sump: {
+                channelID: "2322174",
+                apiKey: "9VMWLF58YXMSKZ4O",
+                field: "field1",
+                isInteger: true,
+                limits: { warning: 100, danger: 60 },
+                name: "Pampa Sump"
+            }
         };
 
-        let lastValues = {};
+        function goBack() {
+            window.location.href = "index.html";
+        }
 
         function timeAgo(timestamp) {
             const now = new Date();
@@ -118,63 +282,280 @@
 
         function updateIndicator(sensor, value) {
             const indicator = document.getElementById(sensor + "_indicator");
-            const limits = channels[sensor].limits;
+            if (!indicator) return;
+            
+            const limits = sensorChannels[sensor].limits;
+            if (!limits) return;
 
             if (value <= limits.danger) {
-                indicator.style.background = "red"; // Critical level
+                indicator.style.background = "red";
             } else if (value <= limits.warning) {
-                indicator.style.background = "yellow"; // Warning level
+                indicator.style.background = "yellow";
             } else {
-                indicator.style.background = "green"; // Normal level
+                indicator.style.background = "green";
             }
         }
 
-        async function fetchThingSpeakData(sensor, details) {
-            const url = `https://api.thingspeak.com/channels/${details.channelID}/feeds.json?api_key=${details.apiKey}&results=1`;
+        async function fetchThingSpeakData(entityId, details) {
+            const url = `https://api.thingspeak.com/channels/${details.channelID}/feeds.json?api_key=${details.apiKey}&results=20`;
+            console.log(`Fetching data for ${entityId} from channel ${details.channelID} field ${details.field} using API key: ${details.apiKey}`);
 
             try {
-                const response = await fetch(url);
+                const response = await fetch(url, { 
+                    method: 'GET',
+                    cache: 'no-cache'
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                
                 const data = await response.json();
-                const latestFeed = data.feeds[0];
+                
+                if (!data || !data.feeds || data.feeds.length === 0) {
+                    console.warn(`No feeds received for ${entityId}`);
+                    return;
+                }
+                
+                const feeds = data.feeds;
+                let lastValidValue = "--";
+                let lastUpdated = "No updates";
+                
+                for (let i = feeds.length - 1; i >= 0; i--) {
+                    let rawValue = feeds[i][details.field];
+                    
+                    if (rawValue === null || rawValue === undefined || rawValue === "") {
+                        continue;
+                    }
+                    
+                    let value = parseFloat(rawValue);
+                    if (!isNaN(value)) {
+                        lastValidValue = value;
+                        lastUpdated = feeds[i].created_at;
+                        break;
+                    }
+                }
 
-                if (latestFeed) {
-                    let newValue = latestFeed[details.field];
-                    const lastUpdated = latestFeed.created_at;
-
-                    if (newValue !== undefined && newValue !== lastValues[sensor]) {
-                        lastValues[sensor] = newValue;
-                        newValue = parseFloat(newValue);
-
-                        if (details.isInteger) {
-                            newValue = Math.round(newValue);
-                        } else {
-                            newValue = newValue.toFixed(details.precision || 2);
-                        }
-
-                        document.getElementById("water_level_cm").innerText = `${newValue} cm`;
-                        document.getElementById("water_level_time").innerText = "Updated " + timeAgo(lastUpdated);
-
-                        // Convert cm to feet & inches
-                        if (sensor === "water_level") {
-                            document.getElementById("water_level_feet").innerText = cmToFeetInches(newValue);
-                        }
-
-                        // Update the indicator
-                        updateIndicator(sensor, newValue);
+                if (lastValidValue !== "--") {
+                    const isSensor = sensorChannels[entityId] !== undefined;
+                    
+                    const formattedValue = (isSensor && details.isInteger) ? 
+                        Math.round(lastValidValue) : 
+                        parseFloat(lastValidValue).toFixed(2);
+                    
+                    if (isSensor) {
+                        const cmElement = document.getElementById(entityId + "_cm");
+                        const feetElement = document.getElementById(entityId + "_feet");
+                        const timeElement = document.getElementById(entityId + "_time");
+                        
+                        if (cmElement) cmElement.innerText = `${formattedValue} cm`;
+                        if (feetElement) feetElement.innerText = cmToFeetInches(formattedValue);
+                        if (timeElement) timeElement.innerText = "Updated " + timeAgo(lastUpdated);
+                        
+                        updateIndicator(entityId, formattedValue);
                     }
                 }
             } catch (error) {
-                console.error(`Error fetching data for ${sensor}:`, error);
+                console.error(`Error fetching data for ${entityId}:`, error);
             }
         }
 
-        function updateAllSensors() {
-            Object.keys(channels).forEach(sensor => fetchThingSpeakData(sensor, channels[sensor]));
+        function updateAllData() {
+            Object.keys(sensorChannels).forEach(sensor => 
+                fetchThingSpeakData(sensor, sensorChannels[sensor])
+            );
+        }        // Load Google Charts and set up the time series charts
+        google.charts.load('current', {'packages':['corechart']});
+        google.charts.setOnLoadCallback(initializeCharts);
+        
+        let sumpChart;
+        let sumpChartData;
+
+        function initializeCharts() {
+            // Initialize Sump Chart
+            sumpChartData = new google.visualization.DataTable();
+            sumpChartData.addColumn('datetime', 'Time');
+            sumpChartData.addColumn('number', 'Pampa Sump (cm)');
+            sumpChartData.addColumn({type: 'string', role: 'tooltip'});
+            
+            // Responsive chart area based on screen size
+            const isMobile = window.innerWidth <= 768;
+            const chartAreaConfig = isMobile ? {
+                left: 45,
+                top: 35,
+                width: '80%',
+                height: '65%'
+            } : {
+                left: 60,
+                top: 40,
+                width: '85%',
+                height: '70%'
+            };
+            
+            const sumpChartOptions = {
+                title: 'Pampa Sump Water Level History',
+                titleTextStyle: { 
+                    color: '#333',
+                    fontSize: isMobile ? 12 : 14,
+                    bold: true
+                },
+                legend: { position: 'bottom' },
+                hAxis: {
+                    title: 'Time',
+                    format: 'HH:mm',
+                    gridlines: { count: isMobile ? 4 : 8 },
+                    titleTextStyle: { fontSize: isMobile ? 10 : 12 },
+                    textStyle: { fontSize: isMobile ? 9 : 11 }
+                },
+                vAxis: {
+                    title: 'Water Level (cm)',
+                    minValue: 0,
+                    titleTextStyle: { fontSize: isMobile ? 10 : 12 },
+                    textStyle: { fontSize: isMobile ? 9 : 11 }
+                },
+                colors: ['#007bff'],
+                lineWidth: 3,
+                pointSize: 5,
+                chartArea: chartAreaConfig,
+                animation: {
+                    startup: true,
+                    duration: 1000,
+                    easing: 'out'
+                }
+            };
+            
+            sumpChart = new google.visualization.LineChart(document.getElementById('sump_level_chart'));
+            sumpChart.draw(sumpChartData, sumpChartOptions);
+            
+            // Add event listener for days selector
+            document.getElementById('days-selector').addEventListener('change', function() {
+                fetchSumpHistoricalData();
+            });
+            
+            // Initial load of chart
+            fetchSumpHistoricalData();
+        }
+        
+        function getResponsiveChartOptions(title, color, selectedDays = 1) {
+            const isMobile = window.innerWidth <= 768;
+            const dayText = selectedDays === 1 ? 'Day' : 'Days';
+            
+            return {
+                title: title,
+                titleTextStyle: { 
+                    color: '#333',
+                    fontSize: isMobile ? 12 : 14,
+                    bold: true
+                },
+                legend: { position: 'bottom' },
+                hAxis: {
+                    title: 'Time',
+                    format: selectedDays === 1 ? 'HH:mm' : 'MM/dd HH:mm',
+                    gridlines: { count: isMobile ? 4 : 8 },
+                    titleTextStyle: { fontSize: isMobile ? 10 : 12 },
+                    textStyle: { fontSize: isMobile ? 9 : 11 }
+                },
+                vAxis: {
+                    title: 'Water Level (cm)',
+                    minValue: 0,
+                    titleTextStyle: { fontSize: isMobile ? 10 : 12 },
+                    textStyle: { fontSize: isMobile ? 9 : 11 }
+                },
+                colors: [color],
+                lineWidth: 3,
+                pointSize: 5,
+                chartArea: isMobile ? {
+                    left: 45,
+                    top: 35,
+                    width: '80%',
+                    height: '65%'
+                } : {
+                    left: 60,
+                    top: 40,
+                    width: '85%',
+                    height: '70%'
+                },
+                animation: {
+                    duration: 1000,
+                    easing: 'out'
+                }
+            };
+        }
+          async function fetchSumpHistoricalData() {
+            try {
+                // Get channel info from sensor configuration
+                const sumpConfig = sensorChannels.Pampa_sump;
+                
+                // Get selected number of days for sump
+                const selectedDays = parseInt(document.getElementById('days-selector').value) || 1;
+                
+                const endDate = new Date();
+                const startDate = new Date(endDate);
+                startDate.setDate(startDate.getDate() - selectedDays);
+                
+                const startStr = `${startDate.getFullYear()}-${(startDate.getMonth()+1).toString().padStart(2, '0')}-${startDate.getDate().toString().padStart(2, '0')}%20${startDate.getHours().toString().padStart(2, '0')}:${startDate.getMinutes().toString().padStart(2, '0')}:${startDate.getSeconds().toString().padStart(2, '0')}`;
+                const endStr = `${endDate.getFullYear()}-${(endDate.getMonth()+1).toString().padStart(2, '0')}-${endDate.getDate().toString().padStart(2, '0')}%20${endDate.getHours().toString().padStart(2, '0')}:${endDate.getMinutes().toString().padStart(2, '0')}:${endDate.getSeconds().toString().padStart(2, '0')}`;
+                
+                const url = `https://api.thingspeak.com/channels/${sumpConfig.channelID}/feeds.json?api_key=${sumpConfig.apiKey}&start=${startStr}&end=${endStr}&results=8000`;
+                
+                const response = await fetch(url, { cache: 'no-cache' });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                if (!data || !data.feeds || data.feeds.length === 0) {
+                    console.warn("No sump historical data received");
+                    document.getElementById('sump_chart_update_time').innerText = "No historical data available";
+                    return;
+                }
+                
+                const dayText = selectedDays === 1 ? 'Day' : 'Days';
+                const sumpRows = [];
+                
+                data.feeds.forEach(feed => {
+                    const date = new Date(feed.created_at);
+                    const sumpValue = feed[sumpConfig.field] ? parseFloat(feed[sumpConfig.field]) : null;
+                    
+                    if (sumpValue !== null) {
+                        const formattedDate = new Date(date);
+                        const sumpTooltip = `${formattedDate.toLocaleDateString()} ${formattedDate.toLocaleTimeString()}\nSump: ${Math.round(sumpValue)} cm`;
+                        sumpRows.push([formattedDate, sumpValue, sumpTooltip]);
+                    }
+                });
+                
+                // Update Sump Chart
+                sumpChartData.removeRows(0, sumpChartData.getNumberOfRows());
+                sumpChartData.addRows(sumpRows);
+                
+                const sumpOptions = getResponsiveChartOptions(
+                    `Pampa Sump Water Level History (${selectedDays} ${dayText})`,
+                    '#007bff',
+                    selectedDays
+                );
+                
+                sumpChart.draw(sumpChartData, sumpOptions);
+                
+                const currentTime = new Date().toLocaleTimeString();
+                document.getElementById('sump_chart_update_time').innerText = 
+                    `Sump chart updated: ${currentTime} • ${sumpRows.length} data points • ${selectedDays} ${dayText}`;
+                    
+            } catch (error) {
+                console.error("Error fetching sump historical data:", error);
+                document.getElementById('sump_chart_update_time').innerText = 
+                    `Error loading sump chart data: ${error.message}`;
+            }
         }
 
-        setInterval(updateAllSensors, 5000); // Update every 5 seconds
-        updateAllSensors();
-    </script>
 
+        
+        updateAllData();
+        setInterval(updateAllData, 1000);
+        setInterval(() => {
+            fetchSumpHistoricalData();
+        }, 60000);
+    </script>
 </body>
 </html>
