@@ -104,6 +104,7 @@
             padding: 5px 2px;
             background-color: #f9f9f9;
             border-radius: 8px;
+            overflow: hidden;
         }
         
         #sump_level_chart, #oht_level_chart {
@@ -111,6 +112,31 @@
             height: 100%;
             margin: 0;
             padding: 0;
+            min-width: 0;
+        }
+        
+        /* Mobile responsive adjustments */
+        @media (max-width: 768px) {
+            #sump_chart_container, #oht_chart_container {
+                padding: 2px 1px;
+            }
+            
+            .card {
+                padding: 10px !important;
+            }
+            
+            .card-header {
+                font-size: 16px !important;
+                padding: 8px !important;
+                flex-direction: column;
+                gap: 5px;
+            }
+            
+            .card-header select {
+                margin-left: 0 !important;
+                width: 100%;
+                max-width: 120px;
+            }
         }
         
         .chart-legend {
@@ -385,32 +411,45 @@
             sumpChartData.addColumn('number', 'ICSR Sump (cm)');
             sumpChartData.addColumn({type: 'string', role: 'tooltip'});
             
+            // Responsive chart area based on screen size
+            const isMobile = window.innerWidth <= 768;
+            const chartAreaConfig = isMobile ? {
+                left: 45,
+                top: 35,
+                width: '80%',
+                height: '65%'
+            } : {
+                left: 60,
+                top: 40,
+                width: '85%',
+                height: '70%'
+            };
+            
             const sumpChartOptions = {
                 title: 'ICSR Sump Water Level History',
                 titleTextStyle: { 
                     color: '#333',
-                    fontSize: 14,
+                    fontSize: isMobile ? 12 : 14,
                     bold: true
                 },
                 legend: { position: 'bottom' },
                 hAxis: {
                     title: 'Time',
                     format: 'HH:mm',
-                    gridlines: { count: 8 }
+                    gridlines: { count: isMobile ? 4 : 8 },
+                    titleTextStyle: { fontSize: isMobile ? 10 : 12 },
+                    textStyle: { fontSize: isMobile ? 9 : 11 }
                 },
                 vAxis: {
                     title: 'Water Level (cm)',
-                    minValue: 0
+                    minValue: 0,
+                    titleTextStyle: { fontSize: isMobile ? 10 : 12 },
+                    textStyle: { fontSize: isMobile ? 9 : 11 }
                 },
                 colors: ['#007bff'],
                 lineWidth: 3,
                 pointSize: 5,
-                chartArea: {
-                    left: 60,
-                    top: 40,
-                    width: '85%',
-                    height: '70%'
-                },
+                chartArea: chartAreaConfig,
                 animation: {
                     startup: true,
                     duration: 1000,
@@ -431,28 +470,27 @@
                 title: 'ICSR OHT Water Level History',
                 titleTextStyle: { 
                     color: '#333',
-                    fontSize: 14,
+                    fontSize: isMobile ? 12 : 14,
                     bold: true
                 },
                 legend: { position: 'bottom' },
                 hAxis: {
                     title: 'Time',
                     format: 'HH:mm',
-                    gridlines: { count: 8 }
+                    gridlines: { count: isMobile ? 4 : 8 },
+                    titleTextStyle: { fontSize: isMobile ? 10 : 12 },
+                    textStyle: { fontSize: isMobile ? 9 : 11 }
                 },
                 vAxis: {
                     title: 'Water Level (cm)',
-                    minValue: 0
+                    minValue: 0,
+                    titleTextStyle: { fontSize: isMobile ? 10 : 12 },
+                    textStyle: { fontSize: isMobile ? 9 : 11 }
                 },
                 colors: ['#28a745'],
                 lineWidth: 3,
                 pointSize: 5,
-                chartArea: {
-                    left: 60,
-                    top: 40,
-                    width: '85%',
-                    height: '70%'
-                },
+                chartArea: chartAreaConfig,
                 animation: {
                     startup: true,
                     duration: 1000,
@@ -476,6 +514,52 @@
             // Initial load of both charts
             fetchSumpHistoricalData();
             fetchOHTHistoricalData();
+        }
+        
+        function getResponsiveChartOptions(title, color, selectedDays = 1) {
+            const isMobile = window.innerWidth <= 768;
+            const dayText = selectedDays === 1 ? 'Day' : 'Days';
+            
+            return {
+                title: title,
+                titleTextStyle: { 
+                    color: '#333',
+                    fontSize: isMobile ? 12 : 14,
+                    bold: true
+                },
+                legend: { position: 'bottom' },
+                hAxis: {
+                    title: 'Time',
+                    format: selectedDays === 1 ? 'HH:mm' : 'MM/dd HH:mm',
+                    gridlines: { count: isMobile ? 4 : 8 },
+                    titleTextStyle: { fontSize: isMobile ? 10 : 12 },
+                    textStyle: { fontSize: isMobile ? 9 : 11 }
+                },
+                vAxis: {
+                    title: 'Water Level (cm)',
+                    minValue: 0,
+                    titleTextStyle: { fontSize: isMobile ? 10 : 12 },
+                    textStyle: { fontSize: isMobile ? 9 : 11 }
+                },
+                colors: [color],
+                lineWidth: 3,
+                pointSize: 5,
+                chartArea: isMobile ? {
+                    left: 45,
+                    top: 35,
+                    width: '80%',
+                    height: '65%'
+                } : {
+                    left: 60,
+                    top: 40,
+                    width: '85%',
+                    height: '70%'
+                },
+                animation: {
+                    duration: 1000,
+                    easing: 'out'
+                }
+            };
         }
           async function fetchSumpHistoricalData() {
             try {
@@ -526,37 +610,11 @@
                 sumpChartData.removeRows(0, sumpChartData.getNumberOfRows());
                 sumpChartData.addRows(sumpRows);
                 
-                const sumpOptions = {
-                    title: `ICSR Sump Water Level History (${selectedDays} ${dayText})`,
-                    titleTextStyle: { 
-                        color: '#333',
-                        fontSize: 14,
-                        bold: true
-                    },
-                    legend: { position: 'bottom' },
-                    hAxis: {
-                        title: 'Time',
-                        format: selectedDays === 1 ? 'HH:mm' : 'MM/dd HH:mm',
-                        gridlines: { count: 8 }
-                    },
-                    vAxis: {
-                        title: 'Water Level (cm)',
-                        minValue: 0
-                    },
-                    colors: ['#007bff'],
-                    lineWidth: 3,
-                    pointSize: 5,
-                    chartArea: {
-                        left: 60,
-                        top: 40,
-                        width: '85%',
-                        height: '70%'
-                    },
-                    animation: {
-                        duration: 1000,
-                        easing: 'out'
-                    }
-                };
+                const sumpOptions = getResponsiveChartOptions(
+                    `ICSR Sump Water Level History (${selectedDays} ${dayText})`,
+                    '#007bff',
+                    selectedDays
+                );
                 
                 sumpChart.draw(sumpChartData, sumpOptions);
                 
@@ -620,37 +678,11 @@
                 ohtChartData.removeRows(0, ohtChartData.getNumberOfRows());
                 ohtChartData.addRows(ohtRows);
                 
-                const ohtOptions = {
-                    title: `ICSR OHT Water Level History (${selectedDays} ${dayText})`,
-                    titleTextStyle: { 
-                        color: '#333',
-                        fontSize: 14,
-                        bold: true
-                    },
-                    legend: { position: 'bottom' },
-                    hAxis: {
-                        title: 'Time',
-                        format: selectedDays === 1 ? 'HH:mm' : 'MM/dd HH:mm',
-                        gridlines: { count: 8 }
-                    },
-                    vAxis: {
-                        title: 'Water Level (cm)',
-                        minValue: 0
-                    },
-                    colors: ['#28a745'],
-                    lineWidth: 3,
-                    pointSize: 5,
-                    chartArea: {
-                        left: 60,
-                        top: 40,
-                        width: '85%',
-                        height: '70%'
-                    },
-                    animation: {
-                        duration: 1000,
-                        easing: 'out'
-                    }
-                };
+                const ohtOptions = getResponsiveChartOptions(
+                    `ICSR OHT Water Level History (${selectedDays} ${dayText})`,
+                    '#28a745',
+                    selectedDays
+                );
                 
                 ohtChart.draw(ohtChartData, ohtOptions);
                 
