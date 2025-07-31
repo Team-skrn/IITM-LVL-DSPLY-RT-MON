@@ -101,7 +101,7 @@
           /* Chart styling */
         #sump_chart_container, #oht_chart_container {
             position: relative;
-            padding: 10px;
+            padding: 5px 2px;
             background-color: #f9f9f9;
             border-radius: 8px;
         }
@@ -109,6 +109,8 @@
         #sump_level_chart, #oht_level_chart {
             width: 100%;
             height: 100%;
+            margin: 0;
+            padding: 0;
         }
         
         .chart-legend {
@@ -403,6 +405,12 @@
                 colors: ['#007bff'],
                 lineWidth: 3,
                 pointSize: 5,
+                chartArea: {
+                    left: 60,
+                    top: 40,
+                    width: '85%',
+                    height: '70%'
+                },
                 animation: {
                     startup: true,
                     duration: 1000,
@@ -439,6 +447,12 @@
                 colors: ['#28a745'],
                 lineWidth: 3,
                 pointSize: 5,
+                chartArea: {
+                    left: 60,
+                    top: 40,
+                    width: '85%',
+                    height: '70%'
+                },
                 animation: {
                     startup: true,
                     duration: 1000,
@@ -532,6 +546,12 @@
                     colors: ['#007bff'],
                     lineWidth: 3,
                     pointSize: 5,
+                    chartArea: {
+                        left: 60,
+                        top: 40,
+                        width: '85%',
+                        height: '70%'
+                    },
                     animation: {
                         duration: 1000,
                         easing: 'out'
@@ -620,6 +640,12 @@
                     colors: ['#28a745'],
                     lineWidth: 3,
                     pointSize: 5,
+                    chartArea: {
+                        left: 60,
+                        top: 40,
+                        width: '85%',
+                        height: '70%'
+                    },
                     animation: {
                         duration: 1000,
                         easing: 'out'
