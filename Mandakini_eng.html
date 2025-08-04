@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IITM Pampa</title>
+    <title>IITM Mandakini</title>
     <!-- Load Google Charts Library -->
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <style>
@@ -205,21 +205,21 @@
     <!-- Sensors Section -->
     <h2 class="section-header">Water Level Monitoring</h2>
     <div class="container" id="sensors-container">
-        <!-- Pampa Sump Sensor -->
+        <!-- Mandakini Sump Sensor -->
         <div class="card">
-            <div class="card-header">Pampa Sump</div>
-            <div class="value-box" id="Pampa_sump_cm">-- cm</div><br>
-            <div class="value-box" id="Pampa_sump_feet">--</div>
-            <div class="timestamp" id="Pampa_sump_time">Waiting for updates...</div>
-            <div class="indicator" id="Pampa_sump_indicator"></div>
+            <div class="card-header">Mandakini Sump</div>
+            <div class="value-box" id="Mandakini_sump_cm">-- cm</div><br>
+            <div class="value-box" id="Mandakini_sump_feet">--</div>
+            <div class="timestamp" id="Mandakini_sump_time">Waiting for updates...</div>
+            <div class="indicator" id="Mandakini_sump_indicator"></div>
         </div>
 
 
         
-        <!-- Pampa Sump History Graph Card -->
+        <!-- Mandakini Sump History Graph Card -->
         <div class="card" style="width: 100%">
             <div class="card-header">
-                Pampa Sump - History
+                Mandakini Sump - History
                 <select id="days-selector" style="float: right; margin-left: 10px; padding: 5px; border-radius: 3px; border: 1px solid #ccc; background: white; color: #333;">
                     <option value="1">1 Day</option>
                     <option value="2">2 Days</option>
@@ -247,13 +247,13 @@
 
     <script>
         const sensorChannels = {
-            Pampa_sump: {
+            Mandakini_sump: {
                 channelID: "2592245",
                 apiKey: "KI554EX3UF1UNCO9",
                 field: "field1",
                 isInteger: true,
                 limits: { warning: 150, danger: 70 },
-                name: "Pampa Sump"
+                name: "Mandakini Sump"
             }
         };
 
@@ -375,7 +375,7 @@
             // Initialize Sump Chart
             sumpChartData = new google.visualization.DataTable();
             sumpChartData.addColumn('datetime', 'Time');
-            sumpChartData.addColumn('number', 'Pampa Sump (cm)');
+            sumpChartData.addColumn('number', 'Mandakini Sump (cm)');
             sumpChartData.addColumn({type: 'string', role: 'tooltip'});
             
             // Responsive chart area based on screen size
@@ -393,7 +393,7 @@
             };
             
             const sumpChartOptions = {
-                title: 'Pampa Sump Water Level History',
+                title: 'Mandakini Sump Water Level History',
                 titleTextStyle: { 
                     color: '#333',
                     fontSize: isMobile ? 12 : 14,
@@ -484,7 +484,7 @@
           async function fetchSumpHistoricalData() {
             try {
                 // Get channel info from sensor configuration
-                const sumpConfig = sensorChannels.Pampa_sump;
+                const sumpConfig = sensorChannels.Mandakini_sump;
                 
                 // Get selected number of days for sump
                 const selectedDays = parseInt(document.getElementById('days-selector').value) || 1;
@@ -531,7 +531,7 @@
                 sumpChartData.addRows(sumpRows);
                 
                 const sumpOptions = getResponsiveChartOptions(
-                    `Pampa Sump Water Level History (${selectedDays} ${dayText})`,
+                    `Mandakini Sump Water Level History (${selectedDays} ${dayText})`,
                     '#007bff',
                     selectedDays
                 );
@@ -559,3 +559,4 @@
     </script>
 </body>
 </html>
+
