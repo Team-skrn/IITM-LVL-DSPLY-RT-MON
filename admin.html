@@ -1301,7 +1301,7 @@ if (typeof window !== 'undefined') {
                             id: row.PageID,
                             displayName: row.PageName,
                             title: row.PageTitle || row.PageName,
-                            icon: row.PageIcon || '📄',
+                            icon: row.PageIcon.trim() || '',
                             sensors: {}
                         };
                     }
@@ -1311,7 +1311,7 @@ if (typeof window !== 'undefined') {
                         channelID: row.ChannelID,
                         apiKey: row.APIKey,
                         field: row.Field,
-                        isInteger: row.IsInteger === 'true' || row.IsInteger === true,
+                        isInteger: (row.IsInteger.trim().toLowerCase() === 'true'),
                         limits: {
                             warning: parseInt(row.WarningLimit) || 150,
                             danger: parseInt(row.DangerLimit) || 60
