@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Under Maintenance</title>
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Open Sans', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .container {
+            background: #ffffff;
+            padding: 40px 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .icon {
+            font-size: 60px;
+            margin-bottom: 15px;
+        }
+
+        h1 {
+            margin: 10px 0;
+            font-size: 26px;
+            color: #333;
+        }
+
+        p {
+            color: #555;
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .footer {
+            font-size: 13px;
+            color: #777;
+        }
+
+        .retry-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .retry-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="icon">🛠️</div>
+        <h1>Under Maintenance</h1>
+        <p>
+            The Water Distribution Network dashboard is currently undergoing
+            scheduled maintenance.<br><br>
+            Please check back shortly.
+        </p>
+
+        <a href="javascript:location.reload()" class="retry-btn">
+            Retry
+        </a>
+
+        <div class="footer">
+            <br>
+            © IIT Madras – Water Systems
+        </div>
+    </div>
+
+</body>
+</html>
