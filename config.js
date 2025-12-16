@@ -14,14 +14,14 @@ const appConfig = {
                 "id": "main_sump",
                 "displayName": "Main Sump",
                 "title": "Main Sump Water Level Monitoring",
-                "icon": "📄",
+                "icon": "",
                 "sensors": {
                         "main_sump": {
                                 "displayName": "Main Sump",
                                 "channelID": "3156369",
                                 "apiKey": "CU8K2JLAOSV53K4X",
                                 "field": "field3",
-                                "isInteger": false,
+                                "isInteger": true,
                                 "limits": {
                                         "warning": 300,
                                         "danger": 100
@@ -33,14 +33,14 @@ const appConfig = {
                 "id": "pampa",
                 "displayName": "Pampa Sump",
                 "title": "Pampa Sump Water Level Monitoring",
-                "icon": "📄",
+                "icon": "",
                 "sensors": {
                         "pampa": {
                                 "displayName": "Pampa Sump",
                                 "channelID": "2322174",
                                 "apiKey": "9VMWLF58YXMSKZ4O",
                                 "field": "field1",
-                                "isInteger": false,
+                                "isInteger": true,
                                 "limits": {
                                         "warning": 100,
                                         "danger": 60
@@ -52,14 +52,14 @@ const appConfig = {
                 "id": "himalaya",
                 "displayName": "Himalaya OHT",
                 "title": "Himalaya OHT Water Level Monitoring",
-                "icon": "📄",
+                "icon": "",
                 "sensors": {
                         "himalaya": {
                                 "displayName": "Himalaya OHT",
                                 "channelID": "2322174",
                                 "apiKey": "9VMWLF58YXMSKZ4O",
                                 "field": "field7",
-                                "isInteger": false,
+                                "isInteger": true,
                                 "limits": {
                                         "warning": 150,
                                         "danger": 60
@@ -71,14 +71,14 @@ const appConfig = {
                 "id": "mandakini",
                 "displayName": "Mandakini",
                 "title": "Mandakini Water Level Monitoring",
-                "icon": "📄",
+                "icon": "",
                 "sensors": {
                         "mandakini": {
                                 "displayName": "Mandakini Sump",
                                 "channelID": "2592245",
                                 "apiKey": "KI554EX3UF1UNCO9",
                                 "field": "field1",
-                                "isInteger": false,
+                                "isInteger": true,
                                 "limits": {
                                         "warning": 150,
                                         "danger": 70
@@ -90,14 +90,14 @@ const appConfig = {
                 "id": "ICSR",
                 "displayName": "ICSR",
                 "title": "ICSR Water Level Monitoring",
-                "icon": "📄",
+                "icon": "",
                 "sensors": {
                         "ICSR_sump": {
                                 "displayName": "ICSR Sump",
                                 "channelID": "2511342",
                                 "apiKey": "IFAV1XCYUFW5Y478",
                                 "field": "field1",
-                                "isInteger": false,
+                                "isInteger": true,
                                 "limits": {
                                         "warning": 100,
                                         "danger": 60
@@ -108,7 +108,7 @@ const appConfig = {
                                 "channelID": "2511342",
                                 "apiKey": "IFAV1XCYUFW5Y478",
                                 "field": "field6",
-                                "isInteger": false,
+                                "isInteger": true,
                                 "limits": {
                                         "warning": 50,
                                         "danger": 30
