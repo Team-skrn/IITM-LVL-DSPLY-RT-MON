@@ -637,12 +637,45 @@
             </div>
         </div>
 
+        <!-- CSV Import/Export Section -->
+        <div class="export-section" style="background: #f0fff0; border-color: #4caf50;">
+            <h3>📊 CSV Configuration Manager</h3>
+            <p style="font-size: 14px; color: #666; margin-bottom: 15px;">Import/Export configuration as CSV file for easy bulk editing.</p>
+            
+            <div style="background: white; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #4caf50;">
+                <div style="font-weight: 600; color: #333; margin-bottom: 10px;">📥 Step 1: Download Sample CSV Format</div>
+                <p style="font-size: 12px; color: #666; margin-bottom: 10px;">Download the template to see the expected format with headers and example data.</p>
+                <button class="btn-export" onclick="downloadSampleCSV()" style="background: #2196F3;">📥 Download Sample CSV</button>
+            </div>
+
+            <div style="background: white; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #2196F3;">
+                <div style="font-weight: 600; color: #333; margin-bottom: 10px;">📤 Step 2: Upload Your CSV File</div>
+                <p style="font-size: 12px; color: #666; margin-bottom: 10px;">Upload a CSV file with your configuration. It will be automatically parsed and converted.</p>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <input type="file" id="csvFileInput" accept=".csv" style="padding: 8px; border: 1px solid #ddd; border-radius: 4px; flex: 1; min-width: 200px;">
+                    <button class="btn-export" onclick="uploadCSV()" style="background: #FF9800;">📤 Upload & Parse CSV</button>
+                </div>
+                <div id="csvParseStatus" style="margin-top: 10px; font-size: 13px;"></div>
+            </div>
+
+            <div id="csvPreview" style="background: white; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #ddd; display: none;">
+                <div style="font-weight: 600; color: #333; margin-bottom: 10px;">📋 CSV Preview & Validation</div>
+                <div id="csvPreviewTable" style="overflow-x: auto; margin-bottom: 10px;"></div>
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn-export" onclick="applyCSVConfig()" style="background: #4caf50;">✅ Apply Configuration</button>
+                    <button class="btn-export" onclick="cancelCSVImport()" style="background: #999;">❌ Cancel</button>
+                </div>
+            </div>
+        </div>
+
         <!-- Export Section -->
         <div class="export-section">
             <h3>📥 Export Configuration</h3>
             <p style="font-size: 14px; color: #666; margin-bottom: 15px;">Download the config.js file and replace it in your GitHub repository.</p>
             <div class="export-buttons">
                 <button class="btn-export" onclick="downloadConfig()" style="background: #4caf50;">📥 Download config.js</button>
+                <button class="btn-export" onclick="downloadConfigJSON()" style="background: #9C27B0;">📥 Download config.json</button>
+                <button class="btn-export" onclick="downloadCurrentCSV()" style="background: #2196F3;">📥 Download Current Config as CSV</button>
                 <button class="btn-export" onclick="showConfigCode()">📋 Show Code</button>
             </div>
             <div class="export-code" id="exportCode" style="display: none;"></div>
@@ -1109,6 +1142,237 @@ if (typeof window !== 'undefined') {
         document.getElementById('adminPassword')?.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') authenticateAdmin();
         });
+
+        // ============ CSV IMPORT/EXPORT FUNCTIONS ============
+
+        function generateSampleCSV() {
+            let csv = 'PageID,PageName,PageTitle,PageIcon,SensorKey,SensorName,ChannelID,APIKey,Field,IsInteger,WarningLimit,DangerLimit\n';
+            
+            if (currentConfig.pages.length === 0) {
+                // Generate default example if no pages exist
+                csv += 'reservoir,Reservoir,Reservoir Water Level Monitoring,💧,Reservoir,Reservoir,3132083,50S4XP3WORJWBWQJ,field3,true,150,60\n';
+                csv += 'reservoir,Reservoir,Reservoir Water Level Monitoring,💧,MainSump,Main Sump,3132083,50S4XP3WORJWBWQJ,field4,true,200,50\n';
+                csv += 'overheadTank,Overhead Tank,Overhead Tank Water Level Monitoring,🏢,OverheadTank,Overhead Tank,3132083,50S4XP3WORJWBWQJ,field6,true,150,60\n';
+            } else {
+                // Generate CSV from current config
+                currentConfig.pages.forEach(page => {
+                    Object.values(page.sensors).forEach((sensor, idx) => {
+                        csv += `${page.id},${page.displayName},${page.title},${page.icon},${Object.keys(page.sensors)[idx]},${sensor.displayName},${sensor.channelID},${sensor.apiKey},${sensor.field},${sensor.isInteger},${sensor.limits.warning},${sensor.limits.danger}\n`;
+                    });
+                });
+            }
+            
+            return csv;
+        }
+
+        function downloadSampleCSV() {
+            const csv = generateSampleCSV();
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'config_sample.csv';
+            link.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function downloadCurrentCSV() {
+            const csv = generateSampleCSV();
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `config_export_${new Date().getTime()}.csv`;
+            link.click();
+            URL.revokeObjectURL(url);
+        }
+
+        let parsedCSVData = null;
+
+        function uploadCSV() {
+            const fileInput = document.getElementById('csvFileInput');
+            const file = fileInput.files[0];
+
+            if (!file) {
+                alert('Please select a CSV file');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const csv = e.target.result;
+                    const lines = csv.split('\n').filter(line => line.trim());
+                    
+                    if (lines.length < 2) {
+                        alert('CSV file is empty or invalid');
+                        return;
+                    }
+
+                    const headers = lines[0].split(',').map(h => h.trim());
+                    const requiredHeaders = ['PageID', 'PageName', 'PageTitle', 'PageIcon', 'SensorKey', 'SensorName', 'ChannelID', 'APIKey', 'Field', 'IsInteger', 'WarningLimit', 'DangerLimit'];
+                    
+                    // Check if all required headers exist
+                    const hasAllHeaders = requiredHeaders.every(h => headers.includes(h));
+                    if (!hasAllHeaders) {
+                        alert(`Missing required headers. Expected: ${requiredHeaders.join(', ')}`);
+                        return;
+                    }
+
+                    // Parse CSV data
+                    const data = [];
+                    for (let i = 1; i < lines.length; i++) {
+                        const values = lines[i].split(',').map(v => v.trim());
+                        if (values.length !== headers.length) continue;
+
+                        const row = {};
+                        headers.forEach((header, idx) => {
+                            row[header] = values[idx];
+                        });
+                        data.push(row);
+                    }
+
+                    if (data.length === 0) {
+                        alert('No valid data rows found in CSV');
+                        return;
+                    }
+
+                    // Store parsed data for preview
+                    parsedCSVData = data;
+                    showCSVPreview(data);
+
+                } catch (error) {
+                    alert('Error parsing CSV: ' + error.message);
+                    console.error(error);
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function showCSVPreview(data) {
+            const previewDiv = document.getElementById('csvPreview');
+            const previewTable = document.getElementById('csvPreviewTable');
+            
+            let html = '<table style="width: 100%; border-collapse: collapse; font-size: 12px;">';
+            html += '<thead><tr style="background: #f0f0f0;">';
+            
+            // Headers
+            const headers = ['PageID', 'PageName', 'SensorKey', 'SensorName', 'ChannelID', 'APIKey', 'Field', 'IsInteger', 'Limits'];
+            headers.forEach(h => {
+                html += `<th style="border: 1px solid #ddd; padding: 8px; text-align: left;">${h}</th>`;
+            });
+            html += '</tr></thead><tbody>';
+
+            // Data rows
+            data.forEach((row, idx) => {
+                html += '<tr style="background: ' + (idx % 2 === 0 ? '#fff' : '#f9f9f9') + ';">';
+                html += `<td style="border: 1px solid #ddd; padding: 8px;">${row.PageID}</td>`;
+                html += `<td style="border: 1px solid #ddd; padding: 8px;">${row.PageName}</td>`;
+                html += `<td style="border: 1px solid #ddd; padding: 8px;">${row.SensorKey}</td>`;
+                html += `<td style="border: 1px solid #ddd; padding: 8px;">${row.SensorName}</td>`;
+                html += `<td style="border: 1px solid #ddd; padding: 8px;"><small>${row.ChannelID}</small></td>`;
+                html += `<td style="border: 1px solid #ddd; padding: 8px;"><small>${row.APIKey.substring(0, 10)}...</small></td>`;
+                html += `<td style="border: 1px solid #ddd; padding: 8px;">${row.Field}</td>`;
+                html += `<td style="border: 1px solid #ddd; padding: 8px;">${row.IsInteger}</td>`;
+                html += `<td style="border: 1px solid #ddd; padding: 8px;"><small>⚠️${row.WarningLimit} 🔴${row.DangerLimit}</small></td>`;
+                html += '</tr>';
+            });
+
+            html += '</tbody></table>';
+            previewTable.innerHTML = html;
+            previewDiv.style.display = 'block';
+
+            document.getElementById('csvParseStatus').innerHTML = `✅ Successfully parsed ${data.length} sensor entries from CSV`;
+        }
+
+        function applyCSVConfig() {
+            if (!parsedCSVData || parsedCSVData.length === 0) {
+                alert('No CSV data to apply');
+                return;
+            }
+
+            try {
+                // Group data by page
+                const pageMap = {};
+                
+                parsedCSVData.forEach(row => {
+                    if (!pageMap[row.PageID]) {
+                        pageMap[row.PageID] = {
+                            id: row.PageID,
+                            displayName: row.PageName,
+                            title: row.PageTitle || row.PageName,
+                            icon: row.PageIcon || '📄',
+                            sensors: {}
+                        };
+                    }
+
+                    pageMap[row.PageID].sensors[row.SensorKey] = {
+                        displayName: row.SensorName,
+                        channelID: row.ChannelID,
+                        apiKey: row.APIKey,
+                        field: row.Field,
+                        isInteger: row.IsInteger === 'true' || row.IsInteger === true,
+                        limits: {
+                            warning: parseInt(row.WarningLimit) || 150,
+                            danger: parseInt(row.DangerLimit) || 60
+                        }
+                    };
+                });
+
+                // Convert to pages array
+                currentConfig.pages = Object.values(pageMap);
+                
+                // Reset CSV input
+                document.getElementById('csvFileInput').value = '';
+                document.getElementById('csvPreview').style.display = 'none';
+                document.getElementById('csvParseStatus').innerHTML = '';
+                parsedCSVData = null;
+
+                // Refresh the UI
+                renderPages();
+                alert(`✅ Configuration applied! ${currentConfig.pages.length} pages with ${parsedCSVData?.length || 0} sensors loaded from CSV.`);
+
+            } catch (error) {
+                alert('Error applying CSV configuration: ' + error.message);
+                console.error(error);
+            }
+        }
+
+        function cancelCSVImport() {
+            document.getElementById('csvFileInput').value = '';
+            document.getElementById('csvPreview').style.display = 'none';
+            document.getElementById('csvParseStatus').innerHTML = '';
+            parsedCSVData = null;
+        }
+
+        function downloadConfigJSON() {
+            // Convert array of pages back to object format
+            const pagesObj = {};
+            currentConfig.pages.forEach(page => {
+                pagesObj[page.id] = {
+                    id: page.id,
+                    displayName: page.displayName,
+                    title: page.title,
+                    icon: page.icon,
+                    sensors: page.sensors
+                };
+            });
+
+            const config = {
+                appTitle: currentConfig.appTitle,
+                defaultLanguage: currentConfig.defaultLanguage,
+                pages: pagesObj
+            };
+
+            const json = JSON.stringify(config, null, 2);
+            const blob = new Blob([json], { type: 'application/json;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `config_${new Date().getTime()}.json`;
+            link.click();
+            URL.revokeObjectURL(url);
+        }
     </script>
 </body>
 </html>
