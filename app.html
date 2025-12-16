@@ -333,6 +333,15 @@
     <script>
         let translationManager;
         
+        // Disable console logs (set to false to enable debug logs)
+        const DEBUG_MODE = false;
+        if (!DEBUG_MODE) {
+            console.log = function() {};
+            console.error = function() {};
+            console.warn = function() {};
+            console.info = function() {};
+        }
+        
         // Initialize Translation Manager FIRST and WAIT for it
         async function initTranslationManager() {
             return new Promise((resolve) => {

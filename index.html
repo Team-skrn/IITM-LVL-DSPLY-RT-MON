@@ -363,6 +363,15 @@
     <!-- New Translation System -->
     <script src="translation-manager.js"></script>
     <script>
+        // Disable console logs (set to true to enable debug logs)
+        const DEBUG_MODE = false;
+        if (!DEBUG_MODE) {
+            console.log = function() {};
+            console.error = function() {};
+            console.warn = function() {};
+            console.info = function() {};
+        }
+        
         // ✅ Initialize Translation Manager with safety checks
         let translationManager;
         
