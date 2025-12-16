@@ -362,6 +362,27 @@
     </style>
     <!-- New Translation System -->
     <script src="translation-manager.js"></script>
+    <script>
+        // ✅ Initialize Translation Manager with safety checks
+        let translationManager;
+        
+        // Wait a bit to ensure TranslationManager class is loaded
+        setTimeout(() => {
+            if (typeof TranslationManager === 'undefined') {
+                console.error('❌ TranslationManager class not loaded!');
+                return;
+            }
+            translationManager = new TranslationManager();
+            console.log('✅ translationManager initialized:', translationManager);
+            
+            // Verify translate method exists
+            if (typeof translationManager.translate === 'function') {
+                console.log('✅ translate() method available');
+            } else {
+                console.error('❌ translate() method NOT available!');
+            }
+        }, 100);
+    </script>
 <!--     <script>
         const correctPassword = "Padur@123"; // Change this to your password
 
@@ -454,17 +475,58 @@
 
     <script>
         // ✅ GENERATE DYNAMIC BUTTONS FROM CONFIG
-        document.addEventListener('DOMContentLoaded', function() {
-            const container = document.getElementById('dynamicButtonsContainer');
-            const pages = appConfig.getAllPages();
-            
-            pages.forEach(page => {
-                const button = document.createElement('a');
-                button.href = `app.html?page=${page.id}`;
-                button.className = 'dashboard-button';
-                button.innerHTML = `${page.icon} ${page.displayName}`;
-                container.appendChild(button);
-            });
+        document.addEventListener('DOMContentLoaded', async function() {
+            try {
+                const container = document.getElementById('dynamicButtonsContainer');
+                const pages = appConfig.getAllPages();
+                
+                // ✅ Wait for translationManager to be initialized
+                let retries = 0;
+                while (!translationManager && retries < 20) {
+                    await new Promise(resolve => setTimeout(resolve, 50));
+                    retries++;
+                }
+                
+                if (!translationManager) {
+                    console.error('❌ translationManager failed to initialize');
+                    // Fallback: use displayNames without translation
+                    pages.forEach(page => {
+                        const button = document.createElement('a');
+                        button.href = `app.html?page=${page.id}`;
+                        button.className = 'dashboard-button';
+                        button.innerHTML = `${page.icon} ${page.displayName}`;
+                        container.appendChild(button);
+                    });
+                    return;
+                }
+                
+                // ✅ WAIT for translation manager to load translations first
+                const savedLanguage = localStorage.getItem('preferredLanguage') || 'en';
+                await translationManager.setLanguage(savedLanguage);
+                
+                // Now generate buttons with translations ready
+                pages.forEach(page => {
+                    const button = document.createElement('a');
+                    button.href = `app.html?page=${page.id}`;
+                    button.className = 'dashboard-button';
+                    
+                    // Use translation key for page name (e.g., page_main_sump)
+                    const pageTranslationKey = `page_${page.id}`;
+                    const translatedName = translationManager.translate(pageTranslationKey) || page.displayName;
+                    
+                    button.innerHTML = `${page.icon} ${translatedName}`;
+                    button.setAttribute('data-i18n', pageTranslationKey);
+                    button.setAttribute('data-display-name', page.displayName); // Store default for fallback
+                    container.appendChild(button);
+                });
+                
+                // Apply translations after buttons are created
+                setTimeout(() => {
+                    translationManager.applyTranslations();
+                }, 100);
+            } catch (error) {
+                console.error('❌ Error generating buttons:', error);
+            }
         });
 
         async function clearCacheAndRefresh() {
@@ -653,13 +715,17 @@
             }
         }
 
-        // Initialize language on page load
-        document.addEventListener('DOMContentLoaded', function() {
+        // ✅ Update UI after language loads (set select dropdown)
+        async function updateLanguageUI() {
             const savedLanguage = localStorage.getItem('preferredLanguage') || 'en';
             if (document.getElementById('language-select')) {
                 document.getElementById('language-select').value = savedLanguage;
             }
-            translationManager.setLanguage(savedLanguage);
+        }
+
+        // ✅ Request permissions after page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            updateLanguageUI();
             autoRequestNotifications();
             requestBackgroundPermission();
         });

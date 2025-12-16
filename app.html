@@ -58,7 +58,7 @@
             color: white;
         }
         .header {
-            background-color: rgba(0, 123, 255, 0.9);
+            background-color: rgba(0, 123, 255, 0);
             color: white;
             padding: 20px;
             margin-bottom: 30px;
@@ -76,7 +76,7 @@
         }
         .back-button, .utility-button {
             padding: 10px 15px;
-            background-color: rgba(255, 255, 255, 0.2);
+            background-color: #007bff;
             color: white;
             border: none;
             border-radius: 5px;
@@ -85,13 +85,6 @@
             font-weight: 600;
         }
         .back-button:hover, .utility-button:hover {
-            background-color: rgba(255, 255, 255, 0.3);
-        }
-        .utility-button {
-            background-color: #007bff;
-            padding: 8px 16px;
-        }
-        .utility-button:hover {
             background-color: #0056b3;
         }
         
@@ -138,17 +131,41 @@
         #chart_container {
             position: relative;
             padding: 0;
-            background-color: rgba(249, 249, 249, 0.95);
+            background-color: rgba(249, 249, 999, 0.95);
             border-radius: 8px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
             width: 100%;
-            height: 400px;
-            min-height: 300px;
+            height: 500px;
+            min-height: 400px;
             box-sizing: border-box;
             margin-top: 20px;
             display: flex;
             flex-direction: column;
             overflow: hidden;
+        }
+        
+        .individual-chart-container {
+            position: relative;
+            padding: 0;
+            background-color: rgba(249, 249, 249, 0.95);
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            width: 100%;
+            height: 500px;
+            min-height: 400px;
+            box-sizing: border-box;
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .individual-chart-wrapper {
+            display: none;
+        }
+        
+        .individual-chart-wrapper.multi-sensor-active {
+            display: block;
         }
         
         .chart-controls {
@@ -161,7 +178,7 @@
             align-items: center;
             flex-wrap: wrap;
             gap: 15px;
-            width: 1%;
+            width: 100%;
             box-sizing: border-box;
         }
         
@@ -175,105 +192,36 @@
             box-sizing: border-box;
         }
         
+        .custom-range-section-multi {
+            padding: 15px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-top: 15px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        
+        
         #level_chart {
             width: 100% !important;
             height: 100% !important;
             flex: 1 !important;
-            min-height: 250px !important;
+            min-height: 400px !important;
         }
         
-        /* Modal Styles */
-        .threshold-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 1999;
+        .sensor-chart {
+            width: 100% !important;
+            height: 100% !important;
+            flex: 1 !important;
+            min-height: 400px !important;
         }
-        .threshold-overlay.active { display: block; }
         
-        .threshold-settings {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-            z-index: 2000;
-            max-width: 500px;
-            width: 90%;
-            max-height: 80vh;
-            overflow-y: auto;
-        }
-        .threshold-settings.active { display: block; }
-        .threshold-settings h3 { margin-top: 0; color: #333; }
-        .threshold-group {
-            margin-bottom: 20px;
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            background-color: #f9f9f9;
-        }
-        .threshold-group h4 { margin: 0 0 10px 0; color: #007bff; }
-        .threshold-toggle-row {
-            margin-bottom: 10px;
-            padding: 8px;
-            background-color: #f0f0f0;
-            border-radius: 4px;
-        }
-        .threshold-toggle-row input[type="checkbox"] {
-            cursor: pointer;
-            width: 18px;
-            height: 18px;
-        }
-        .threshold-input {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
-            gap: 10px;
-        }
-        .threshold-input label { font-weight: bold; min-width: 80px; color: #333; }
-        .threshold-input input {
-            padding: 8px 12px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 16px;
-            flex: 1;
-            max-width: 150px;
-        }
-        .btn-save, .btn-cancel {
-            padding: 10px 20px;
-            font-size: 16px;
-            font-weight: bold;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin: 10px 5px;
-        }
-        .btn-save {
-            background-color: #28a745;
-            color: white;
-        }
-        .btn-save:hover { background-color: #218838; }
-        .btn-cancel {
-            background-color: #6c757d;
-            color: white;
-        }
-        .btn-cancel:hover { background-color: #5a6268; }
-        
-        /* RESPONSIVE: Tablets */
         @media (max-width: 768px) {
             #chart_container { height: 350px; }
             .chart-controls { padding: 12px; gap: 10px; }
         }
         
-        /* RESPONSIVE: Phones */
         @media (max-width: 550px) {
             body { padding: 8px; font-size: 14px; }
             h1 { font-size: 20px; }
@@ -284,6 +232,11 @@
                 margin: 20px 0;
                 overflow: hidden;
                 max-height: 100%;
+            }
+            
+            .individual-chart-container {
+                height: auto !important;
+                margin-top: 15px;
             }
             
             .chart-controls {
@@ -300,19 +253,26 @@
                 margin-top: 10px;
             }
             
-            #custom-range-section > div {
+            .custom-range-section-multi {
+                padding: 12px;
+                margin-top: 10px;
+            }
+            
+            #custom-range-section > div,
+            .custom-range-section-multi > div {
                 flex-direction: column;
                 gap: 10px;
             }
             
             #custom-range-section input,
-            #custom-range-section button {
+            #custom-range-section button,
+            .custom-range-section-multi input,
+            .custom-range-section-multi button {
                 width: 100%;
                 padding: 10px;
             }
         }
         
-        /* RESPONSIVE: Small Phones */
         @media (max-width: 360px) {
             body { padding: 5px; }
             #chart_container { height: 380px; }
@@ -324,32 +284,16 @@
     <div class="header">
         <button class="back-button" onclick="goBack()" data-i18n="back">← Back</button>
         <h1 id="pageTitle" data-i18n="water_management">Water Management</h1>
-        <!-- THRESHOLD SETTINGS DISABLED: Alert Settings button removed from UI
-        <button class="utility-button" onclick="openThresholdSettings()" style="background-color: #007bff;" title="Set alert thresholds">⚙️ Alert Settings</button>
-        -->
     </div>
 
-    <!-- THRESHOLD SETTINGS MODAL DISABLED: Entire threshold modal hidden
-    <div class="threshold-overlay" id="thresholdOverlay" onclick="closeThresholdSettings()"></div>
-    <div class="threshold-settings" id="thresholdSettings">
-        <span onclick="closeThresholdSettings()" style="cursor: pointer; font-size: 24px; float: right;">&times;</span>
-        <h3>⚙️ Alert Threshold Settings</h3>
-        <p>Set minimum and maximum water level limits.</p>
-        <div id="sensorsContainer"></div>
-        <button class="btn-save" onclick="saveThresholdSettings()">✅ Save Settings</button>
-        <button class="btn-cancel" onclick="closeThresholdSettings()">❌ Cancel</button>
-    </div>
-    -->
+    <h2 class="section-header" id="pageTitleHeading" style="color: rgb(0, 89, 255); text-shadow: 0 0 10px rgba(238, 238, 238, 0.8), 0 0 20px rgba(246, 246, 246, 0.6), 0 0 30px rgba(0, 123, 255, 0.4), 2px 2px 4px rgba(0,0,0,0.5); font-size: 3em; margin: 0;">Water Management</h2>
+    <h2 class="section-header" data-i18n="water_level_monitoring" id="sectionTitle" style="display: none;">Water Level Monitoring</h2>
+    <div class="container" id="sensors-container"></div>
+    
+    <div id="multi-sensor-charts" style="display: none;"></div>
 
-    <!-- Sensors Section -->
-    <h2 class="section-header" data-i18n="water_level_monitoring" id="sectionTitle">Water Level Monitoring</h2>
-    <div class="container" id="sensors-container">
-        <!-- Dynamically populated -->
-    </div>
-
-    <!-- Chart with Controls -->
     <div id="chart_container">
-        <div class="chart-controls" style="padding: 15px; background: #007bff; color: white; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; width: 100%; box-sizing: border-box;">
+        <div class="chart-controls">
             <span style="font-weight: bold; font-size: 18px;" data-i18n="water_level_history">Water Level History</span>
             <select id="days-selector" style="padding: 8px 12px; border-radius: 3px; border: 1px solid #ccc; background: white; color: #333; font-weight: 600; cursor: pointer;">
                 <option value="1" data-i18n="day_1">1 Day</option>
@@ -369,7 +313,6 @@
         <div id="level_chart"></div>
     </div>
 
-    <!-- Custom Date Range Section - MOVED OUTSIDE CHART CONTAINER -->
     <div id="custom-range-section" style="padding: 15px; background-color: #f9f9f9; border: 1px solid #ddd; border-radius: 8px; margin-top: 15px; display: none; width: 100%; box-sizing: border-box;">
         <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center; justify-content: center;">
             <div>
@@ -388,35 +331,65 @@
     <div class="timestamp" id="chart_update_time" style="text-align: center; margin-top: 10px; color: #666; font-size: 14px;" data-i18n="waiting_for_history">Waiting for history data...</div>
 
     <script>
-        // ✅ Get current page from URL parameter
+        let translationManager;
+        
+        // Initialize Translation Manager FIRST and WAIT for it
+        async function initTranslationManager() {
+            return new Promise((resolve) => {
+                let retries = 0;
+                const maxRetries = 100; // 5 seconds at 50ms intervals
+                
+                const checkInterval = setInterval(() => {
+                    retries++;
+                    
+                    if (typeof TranslationManager !== 'undefined') {
+                        clearInterval(checkInterval);
+                        translationManager = new TranslationManager();
+                        console.log('✅ translationManager instance created');
+                        
+                        // Load the saved language preference
+                        const savedLanguage = localStorage.getItem('preferredLanguage') || 'en';
+                        translationManager.loadTranslations(savedLanguage).then((success) => {
+                            if (success) {
+                                console.log('✅ Translations loaded for:', savedLanguage);
+                            } else {
+                                console.warn('⚠️ Failed to load translations, using fallback');
+                            }
+                            resolve();
+                        }).catch((err) => {
+                            console.error('❌ Failed to load translations:', err);
+                            resolve(); // Resolve anyway to continue
+                        });
+                    } else if (retries > maxRetries) {
+                        clearInterval(checkInterval);
+                        console.error('❌ TranslationManager not loaded, creating instance anyway');
+                        translationManager = new TranslationManager ? new TranslationManager() : {};
+                        resolve(); // Resolve to continue
+                    }
+                }, 50);
+            });
+        }
+
         const urlParams = new URLSearchParams(window.location.search);
         const currentPageId = urlParams.get('page') || 'reservoir';
         const currentPageConfig = appConfig.getPage(currentPageId);
         
-        // ✅ Hide sensitive data from console
-        Object.defineProperty(appConfig, 'pages', {
-            enumerable: false,
-            configurable: false,
-            writable: false
-        });
-
-        // ✅ Store config in localStorage for Service Worker background monitoring
-        try {
-            localStorage.setItem('appConfig', JSON.stringify(appConfig));
-            console.log('✅ Config stored for background monitoring');
-        } catch (e) {
-            console.warn('⚠️ Could not store config:', e);
-        }
-
         if (!currentPageConfig) {
-            document.body.innerHTML = '<h1>❌ Page not found</h1>';
+            document.body.innerHTML = '<h1>Page not found</h1>';
         }
 
-        // ✅ Initialize page
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', async function() {
+            // WAIT for translation manager to be initialized and ready
+            await initTranslationManager();
+            
+            // Double-check translationManager exists and has translate method
+            if (!translationManager || typeof translationManager.translate !== 'function') {
+                console.warn('⚠️ translationManager not functional, creating new instance');
+                translationManager = new TranslationManager();
+                await translationManager.loadTranslations(localStorage.getItem('preferredLanguage') || 'en');
+            }
+            
             initializePage();
-            loadThresholdSettings();
-            // Apply translations after page content is generated
             setTimeout(() => {
                 translationManager.applyTranslations();
             }, 100);
@@ -424,19 +397,31 @@
 
         function initializePage() {
             if (!currentPageConfig) return;
+            if (!translationManager || typeof translationManager.translate !== 'function') {
+                console.error('❌ translationManager not ready! Retrying...');
+                return setTimeout(initializePage, 100);
+            }
 
-            // Set page title
             document.title = currentPageConfig.title;
             document.getElementById('pageTitle').textContent = currentPageConfig.displayName;
+            const pageTitleHeading = document.getElementById('pageTitleHeading');
+            const pageTranslationKey = `page_${currentPageConfig.id}`;
+            const translatedPageName = (translationManager && translationManager.translate) ? 
+                (translationManager.translate(pageTranslationKey) || currentPageConfig.displayName) : 
+                currentPageConfig.displayName;
+            pageTitleHeading.textContent = translatedPageName;
             document.getElementById('sectionTitle').textContent = currentPageConfig.title;
 
-            // Generate sensor cards
             const container = document.getElementById('sensors-container');
             container.innerHTML = '';
             Object.entries(currentPageConfig.sensors).forEach(([sensorId, sensorConfig]) => {
+                const sensorTranslationKey = `sensor_${currentPageConfig.id}_${sensorId}`;
+                const translatedSensorName = (translationManager && translationManager.translate) ? 
+                    (translationManager.translate(sensorTranslationKey) || sensorConfig.displayName) : 
+                    sensorConfig.displayName;
                 container.innerHTML += `
                     <div class="card">
-                        <div class="card-header">${sensorConfig.displayName}</div>
+                        <div class="card-header" data-i18n="${sensorTranslationKey}">${translatedSensorName}</div>
                         <div class="value-box" id="${sensorId}_cm">-- cm</div><br>
                         <div class="value-box" id="${sensorId}_feet">--</div>
                         <div class="timestamp" id="${sensorId}_time">Waiting for updates...</div>
@@ -445,58 +430,12 @@
                 `;
             });
 
-            // THRESHOLD SETTINGS DISABLED: Modal generation code commented out
-            /*
-            const sensorsContainer = document.getElementById('sensorsContainer');
-            sensorsContainer.innerHTML = '';
-            Object.entries(currentPageConfig.sensors).forEach(([sensorId, sensorConfig]) => {
-                sensorsContainer.innerHTML += `
-                    <div class="threshold-group">
-                        <h4>${sensorConfig.displayName}</h4>
-                        <div class="threshold-toggle-row">
-                            <label style="display: flex; align-items: center; gap: 8px;">
-                                <input type="checkbox" id="threshold-${sensorId}-enable"> Enable Alerts
-                            </label>
-                        </div>
-                        <div class="threshold-toggle-row">
-                            <label style="display: flex; align-items: center; gap: 8px;">
-                                <input type="checkbox" id="threshold-${sensorId}-repeat"> Repeat Alerts (every 5 min)
-                            </label>
-                        </div>
-                        <div class="threshold-input">
-                            <label>Min (cm):</label>
-                            <input type="number" id="threshold-${sensorId}-min" placeholder="e.g., 50" min="0">
-                        </div>
-                        <div class="threshold-input">
-                            <label>Max (cm):</label>
-                            <input type="number" id="threshold-${sensorId}-max" placeholder="e.g., 180" min="0">
-                        </div>
-                    </div>
-                `;
-            });
-            */
-
-            // Start fetching data
             updateAllData();
-            setInterval(updateAllData, 20000); // Update every 20 seconds
+            setInterval(updateAllData, 20000);
 
-            // Initialize charts
             google.charts.load('current', {'packages':['corechart']});
             google.charts.setOnLoadCallback(initializeCharts);
         }
-
-        function changeLanguage(lang) {
-            translationManager.setLanguage(lang);
-            localStorage.setItem('preferredLanguage', lang);
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            const savedLanguage = localStorage.getItem('preferredLanguage') || 'en';
-            if (document.getElementById('language-select')) {
-                document.getElementById('language-select').value = savedLanguage;
-            }
-            translationManager.setLanguage(savedLanguage);
-        });
 
         function goBack() {
             window.location.href = 'index.html';
@@ -534,260 +473,12 @@
             }
         }
 
-        /* ====================================================================
-           PUSH NOTIFICATIONS - TEMPORARILY DISABLED
-           ====================================================================
-           REASON: Notification system disabled for testing/refinement
-           
-           COMMENTED CODE:
-           - showNotification() function (lines 533-544)
-           - Displays browser notifications with custom icons and options
-           - Only shows if notifications are enabled in localStorage and browser supports them
-           
-           USAGE (when re-enabling):
-           1. Uncomment showNotification() function below
-           2. Uncomment calls to showNotification() in:
-              - saveThresholdSettings() (line 655)
-              - checkWaterLevelThresholds() (line 697)
-           3. Ensure browser has notification permission granted
-           ====================================================================== */
-        
-        /*
-        // ✅ Show Notification
-        function showNotification(title, options = {}) {
-            if (localStorage.getItem('notificationsEnabled') === 'true' && 'Notification' in window) {
-                if (Notification.permission === 'granted') {
-                    new Notification(title, {
-                        icon: 'IIT_Madras_Logo_192.png',
-                        badge: 'IIT_Madras_Logo.ico',
-                        ...options
-                    });
-                }
-            }
-        }
-        */
-
-        // ✅ PAGE CONFIGURATION
-        const pageConfig = {
-            pageName: currentPageId,
-            displayName: currentPageConfig.displayName,
-            sensors: Object.keys(currentPageConfig.sensors)
-        };
-
-        /* ====================================================================
-           ALERT SETTINGS BACKEND FUNCTIONS - ALL DISABLED
-           ====================================================================
-           REASON: Backend threshold checking system disabled globally
-           
-           DISABLED FUNCTIONS:
-           - getGlobalAlertSettings() - Retrieves alert settings from localStorage
-           - saveGlobalAlertSettings() - Saves alert settings to localStorage
-           - checkWaterLevelThresholds() - Checks if water level breaches thresholds
-           
-           DISABLED CALLS:
-           - checkWaterLevelThresholds() call in fetchThingSpeakData()
-           
-           DATA STORAGE:
-           ✅ localStorage.setItem('globalAlertSettings') - Still works but unused
-           ✅ localStorage.getItem('globalAlertSettings') - Retrievable but unused
-           ✅ lastAlert_* timestamps - Still tracked but unused
-           
-           WHEN RE-ENABLING:
-           1. Uncomment all 3 functions below
-           2. Uncomment checkWaterLevelThresholds() call in fetchThingSpeakData()
-           3. Uncomment getGlobalAlertSettings() helper calls
-           4. Test threshold detection with configured limits
-           ====================================================================== */
-        
-        /*
-        // ✅ Get Global Alert Settings
-        function getGlobalAlertSettings() {
-            const defaults = {
-                enabledAlerts: {},
-                enabledRepeating: {},
-                thresholds: {}
-            };
-
-            pageConfig.sensors.forEach(sensor => {
-                defaults.enabledAlerts[sensor] = true;
-                defaults.enabledRepeating[sensor] = false;
-                defaults.thresholds[sensor] = { min: null, max: null };
-            });
-
-            const saved = localStorage.getItem('globalAlertSettings');
-            if (!saved) return defaults;
-
-            try {
-                const parsed = JSON.parse(saved);
-                return {
-                    enabledAlerts: { ...defaults.enabledAlerts, ...parsed.enabledAlerts },
-                    enabledRepeating: { ...defaults.enabledRepeating, ...parsed.enabledRepeating },
-                    thresholds: { ...defaults.thresholds, ...parsed.thresholds }
-                };
-            } catch (e) {
-                console.error('Error parsing alert settings:', e);
-                return defaults;
-            }
-        }
-
-        // ✅ Save Global Alert Settings
-        function saveGlobalAlertSettings(settings) {
-            try {
-                localStorage.setItem('globalAlertSettings', JSON.stringify(settings));
-            } catch (e) {
-                console.error('Error saving alert settings:', e);
-                alert('Error saving settings: ' + e.message);
-            }
-        }
-        */
-
-        /* ====================================================================
-           THRESHOLD SETTINGS FUNCTIONS - ALL DISABLED
-           ====================================================================
-           REASON: Threshold settings UI removed from frontend
-           
-           DISABLED FUNCTIONS:
-           - openThresholdSettings() - Opens modal dialog
-           - closeThresholdSettings() - Closes modal dialog
-           - loadThresholdSettings() - Loads saved thresholds from localStorage
-           - saveThresholdSettings() - Saves threshold settings to localStorage
-           
-           BACKEND FUNCTIONALITY:
-           ✅ STILL ACTIVE: checkWaterLevelThresholds() in fetchThingSpeakData()
-           ✅ STILL ACTIVE: Threshold detection and cooldown logic
-           ✅ STILL ACTIVE: localStorage storage of threshold settings
-           
-           WHEN RE-ENABLING:
-           1. Uncomment these function definitions
-           2. Uncomment threshold modal HTML (lines 330-340)
-           3. Uncomment Alert Settings button (line 327)
-           4. Uncomment sensorsContainer generation in initializePage()
-           5. Test threshold modal opens/closes
-           ====================================================================== */
-        
-        /*
-        // ✅ Open Threshold Settings Modal
-        function openThresholdSettings() {
-            document.getElementById('thresholdSettings').classList.add('active');
-            document.getElementById('thresholdOverlay').classList.add('active');
-            loadThresholdSettings();
-        }
-
-        // ✅ Close Threshold Settings Modal
-        function closeThresholdSettings() {
-            document.getElementById('thresholdSettings').classList.remove('active');
-            document.getElementById('thresholdOverlay').classList.remove('active');
-        }
-
-        // ✅ Load Threshold Settings
-        function loadThresholdSettings() {
-            const settings = getGlobalAlertSettings();
-
-            pageConfig.sensors.forEach(sensor => {
-                const minInput = document.getElementById(`threshold-${sensor}-min`);
-                const maxInput = document.getElementById(`threshold-${sensor}-max`);
-                const enableToggle = document.getElementById(`threshold-${sensor}-enable`);
-                const repeatToggle = document.getElementById(`threshold-${sensor}-repeat`);
-
-                if (minInput && settings.thresholds[sensor]) {
-                    minInput.value = settings.thresholds[sensor].min || '';
-                }
-                if (maxInput && settings.thresholds[sensor]) {
-                    maxInput.value = settings.thresholds[sensor].max || '';
-                }
-                if (enableToggle) {
-                    enableToggle.checked = settings.enabledAlerts[sensor] !== false;
-                }
-                if (repeatToggle) {
-                    repeatToggle.checked = settings.enabledRepeating[sensor] === true;
-                }
-            });
-        }
-
-        // ✅ Save Threshold Settings
-        function saveThresholdSettings() {
-            try {
-                const settings = getGlobalAlertSettings();
-
-                pageConfig.sensors.forEach(sensor => {
-                    const minInput = document.getElementById(`threshold-${sensor}-min`);
-                    const maxInput = document.getElementById(`threshold-${sensor}-max`);
-                    const enableToggle = document.getElementById(`threshold-${sensor}-enable`);
-                    const repeatToggle = document.getElementById(`threshold-${sensor}-repeat`);
-
-                    settings.thresholds[sensor] = {
-                        min: minInput && minInput.value ? parseFloat(minInput.value) : null,
-                        max: maxInput && maxInput.value ? parseFloat(maxInput.value) : null
-                    };
-
-                    if (enableToggle) {
-                        settings.enabledAlerts[sensor] = enableToggle.checked;
-                    }
-                    if (repeatToggle) {
-                        settings.enabledRepeating[sensor] = repeatToggle.checked;
-                    }
-                });
-
-                saveGlobalAlertSettings(settings);
-                // NOTIFICATION DISABLED: showNotification('✅ Alert Settings Saved', {
-                //     body: 'Your threshold settings have been saved globally.'
-                // });
-                alert('✅ Alert Settings Saved');
-                closeThresholdSettings();
-            } catch (e) {
-                alert('Error saving thresholds: ' + e.message);
-            }
-        }
-        */
-
-        // ✅ Check Water Level Thresholds
-        function checkWaterLevelThresholds(sensorId, currentLevel) {
-            try {
-                const settings = getGlobalAlertSettings();
-
-                if (!settings.enabledAlerts[sensorId]) return;
-                if (!settings.thresholds[sensorId]) return;
-
-                const sensorThreshold = settings.thresholds[sensorId];
-                const lastAlertKey = `lastAlert_${sensorId}`;
-                const lastAlertTime = localStorage.getItem(lastAlertKey) || 0;
-                const now = Date.now();
-
-                const isRepeatingEnabled = settings.enabledRepeating[sensorId];
-                const cooldownTime = isRepeatingEnabled ? 300000 : Infinity;
-
-                if (now - parseInt(lastAlertTime) < cooldownTime) return;
-
-                let shouldAlert = false;
-                let alertMessage = '';
-                let alertTitle = '';
-
-                if (sensorThreshold.min !== null && currentLevel < sensorThreshold.min) {
-                    shouldAlert = true;
-                    alertTitle = `⚠️ ${sensorId} CRITICAL LOW`;
-                    alertMessage = `Water level ${currentLevel} cm is below minimum ${sensorThreshold.min} cm`;
-                } else if (sensorThreshold.max !== null && currentLevel > sensorThreshold.max) {
-                    shouldAlert = true;
-                    alertTitle = `⚠️ ${sensorId} CRITICAL HIGH`;
-                    alertMessage = `Water level ${currentLevel} cm exceeds maximum ${sensorThreshold.max} cm`;
-                }
-
-                if (shouldAlert) {
-                    // NOTIFICATION DISABLED: showNotification(alertTitle, { body: alertMessage });
-                    console.warn('⚠️ Threshold breach detected - Notifications disabled:', { alertTitle, alertMessage });
-                    localStorage.setItem(lastAlertKey, now.toString());
-                }
-            } catch (e) {
-                console.error('Error checking thresholds:', e);
-            }
-        }
-
-        // ✅ Fetch Data from ThingSpeak
         async function fetchThingSpeakData(sensorId) {
             const sensorConfig = currentPageConfig.sensors[sensorId];
             if (!sensorConfig) return;
 
-            const url = `https://api.thingspeak.com/channels/${sensorConfig.channelID}/feeds.json?api_key=${sensorConfig.apiKey}&results=20`;
+            const fieldNumber = sensorConfig.field.replace('field', '');
+            const url = `https://api.thingspeak.com/channels/${sensorConfig.channelID}/feeds.json?api_key=${sensorConfig.apiKey}&results=20&fields=${fieldNumber}`;
             try {
                 const response = await fetch(url, { method: 'GET', cache: 'no-cache' });
                 if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
@@ -818,9 +509,7 @@
                     if (timeElement) timeElement.innerText = 'Updated ' + timeAgo(lastUpdated);
 
                     updateIndicator(sensorId, formattedValue);
-                    const numericValue = parseFloat(formattedValue);
-                    // THRESHOLD CHECKING DISABLED: checkWaterLevelThresholds(sensorId, numericValue);
-                    console.log(`[DATA] ${sensorId}: ${numericValue} cm (threshold checking disabled)`);
+                    console.log(`[DATA] ${sensorId}: ${formattedValue} cm`);
                 }
             } catch (error) {
                 console.error(`Error fetching data for ${sensorId}:`, error);
@@ -831,63 +520,159 @@
             Object.keys(currentPageConfig.sensors).forEach(sensor => fetchThingSpeakData(sensor));
         }
 
-        // ✅ Initialize Charts
         let Chart;
         let ChartData;
         let isCustomRange = false;
+        let Charts = {}; // Map to store chart objects for each sensor
+        let ChartsData = {}; // Map to store data tables for each sensor
+        let isMultiSensorMode = false;
 
         function initializeCharts() {
-            ChartData = new google.visualization.DataTable();
-            ChartData.addColumn('datetime', 'Time');
-            ChartData.addColumn('number', 'Water Level (cm)');
-            ChartData.addColumn({type: 'string', role: 'tooltip'});
-
-            Chart = new google.visualization.LineChart(document.getElementById('level_chart'));
+            const sensorKeys = Object.keys(currentPageConfig.sensors);
+            isMultiSensorMode = sensorKeys.length > 1;
             
-            // Setup date selector event listener
-            document.getElementById('days-selector').addEventListener('change', function() {
-                if (this.value === 'custom') {
-                    document.getElementById('custom-range-section').style.display = 'block';
-                    const savedCustomRange = localStorage.getItem('customDateRange');
-                    if (savedCustomRange) {
-                        const ranges = JSON.parse(savedCustomRange);
-                        document.getElementById('custom-start-date').value = ranges.start;
-                        document.getElementById('custom-end-date').value = ranges.end;
-                        fetchCustomDateRange();
+            if (isMultiSensorMode) {
+                // Show multi-sensor charts
+                document.getElementById('chart_container').style.display = 'none';
+                document.getElementById('multi-sensor-charts').style.display = 'block';
+                
+                // Create a chart for each sensor
+                sensorKeys.forEach(sensorId => {
+                    const sensorConfig = currentPageConfig.sensors[sensorId];
+                    const sensorTranslationKey = `sensor_${currentPageConfig.id}_${sensorId}`;
+                    const translatedSensorName = (translationManager && translationManager.translate) ? 
+                        (translationManager.translate(sensorTranslationKey) || sensorConfig.displayName) : 
+                        sensorConfig.displayName;
+                    
+                    // Create chart container HTML
+                    const chartHtml = `
+                        <div class="individual-chart-wrapper multi-sensor-active" id="${sensorId}_chart_wrapper">
+                            <div class="individual-chart-container">
+                                <div class="chart-controls">
+                                    <span style="font-weight: bold; font-size: 18px;" data-i18n="sensor_${currentPageConfig.id}_${sensorId}">${translatedSensorName}</span>
+                                    <select class="days-selector-multi" data-sensorid="${sensorId}" style="padding: 8px 12px; border-radius: 3px; border: 1px solid #ccc; background: white; color: #333; font-weight: 600; cursor: pointer;">
+                                        <option value="1" data-i18n="day_1">1 Day</option>
+                                        <option value="2" data-i18n="day_2">2 Days</option>
+                                        <option value="3" data-i18n="day_3">3 Days</option>
+                                        <option value="4" data-i18n="day_4">4 Days</option>
+                                        <option value="5" data-i18n="day_5">5 Days</option>
+                                        <option value="6" data-i18n="day_6">6 Days</option>
+                                        <option value="7" data-i18n="day_7">7 Days</option>
+                                        <option value="custom" data-i18n="custom_range">Custom Range</option>
+                                    </select>
+                                    <div style="display: flex; gap: 10px; align-items: center;">
+                                        <label style="font-size: 14px; font-weight: bold; color: white;" data-i18n="line_color">Line Color</label>
+                                        <input type="color" class="line-color-picker-multi" data-sensorid="${sensorId}" value="#048ebd" style="width: 50px; height: 40px; border: 1px solid #ccc; border-radius: 3px; cursor: pointer;">
+                                    </div>
+                                </div>
+                                <div id="${sensorId}_chart" class="sensor-chart"></div>
+                            </div>
+                            <div id="${sensorId}_custom_range_section" class="custom-range-section-multi" style="padding: 15px; background-color: #f9f9f9; border: 1px solid #ddd; border-radius: 8px; margin-top: 15px; display: none; width: 100%; box-sizing: border-box;">
+                                <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center; justify-content: center;">
+                                    <div>
+                                        <label style="font-size: 12px; font-weight: bold;" data-i18n="from">From:</label><br>
+                                        <input type="datetime-local" class="custom-start-date-multi" data-sensorid="${sensorId}" style="padding: 8px; border: 1px solid #ccc; border-radius: 3px;">
+                                    </div>
+                                    <div>
+                                        <label style="font-size: 12px; font-weight: bold;" data-i18n="to">To:</label><br>
+                                        <input type="datetime-local" class="custom-end-date-multi" data-sensorid="${sensorId}" style="padding: 8px; border: 1px solid #ccc; border-radius: 3px;">
+                                    </div>
+                                    <div style="margin-top: 18px;">
+                                        <button onclick="fetchCustomDateRangeMulti('${sensorId}')" style="padding: 8px 15px; background-color: #007bff; color: white; border: none; border-radius: 3px; cursor: pointer; font-weight: 600;" data-i18n="fetch_data">Fetch Data</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="timestamp" id="${sensorId}_chart_update_time" style="text-align: center; margin-top: 10px; color: #666; font-size: 14px;" data-i18n="waiting_for_history">Waiting for history data...</div>
+                        </div>
+                    `;
+                    
+                    document.getElementById('multi-sensor-charts').innerHTML += chartHtml;
+                });
+                
+                // Initialize data tables and charts for each sensor
+                sensorKeys.forEach(sensorId => {
+                    ChartsData[sensorId] = new google.visualization.DataTable();
+                    ChartsData[sensorId].addColumn('datetime', 'Time');
+                    ChartsData[sensorId].addColumn('number', 'Water Level (cm)');
+                    ChartsData[sensorId].addColumn({type: 'string', role: 'tooltip'});
+                    
+                    Charts[sensorId] = new google.visualization.LineChart(document.getElementById(sensorId + '_chart'));
+                    
+                    // Add event listeners for each sensor
+                    const daysSelector = document.querySelector(`select.days-selector-multi[data-sensorid="${sensorId}"]`);
+                    if (daysSelector) {
+                        daysSelector.addEventListener('change', function() {
+                            if (this.value === 'custom') {
+                                document.getElementById(sensorId + '_custom_range_section').style.display = 'block';
+                            } else {
+                                document.getElementById(sensorId + '_custom_range_section').style.display = 'none';
+                                fetchHistoricalDataMulti(sensorId);
+                            }
+                        });
                     }
-                } else {
-                    document.getElementById('custom-range-section').style.display = 'none';
-                    isCustomRange = false;
-                    localStorage.removeItem('customDateRange');
-                    fetchHistoricalData();
-                }
-            });
-            
-            // Setup color picker event listener
-            const colorPicker = document.getElementById('line-color-picker');
-            if (colorPicker) {
-                colorPicker.addEventListener('change', function() {
-                    localStorage.setItem('graphLineColor', this.value);
-                    if (isCustomRange) {
-                        fetchCustomDateRange();
+                    
+                    const colorPicker = document.querySelector(`input.line-color-picker-multi[data-sensorid="${sensorId}"]`);
+                    if (colorPicker) {
+                        colorPicker.addEventListener('change', function() {
+                            localStorage.setItem(`graphLineColor_${sensorId}`, this.value);
+                            fetchHistoricalDataMulti(sensorId);
+                        });
+                    }
+                    
+                    // Load initial data
+                    fetchHistoricalDataMulti(sensorId);
+                });
+            } else {
+                // Single sensor mode - use original logic
+                ChartData = new google.visualization.DataTable();
+                ChartData.addColumn('datetime', 'Time');
+                ChartData.addColumn('number', 'Water Level (cm)');
+                ChartData.addColumn({type: 'string', role: 'tooltip'});
+
+                Chart = new google.visualization.LineChart(document.getElementById('level_chart'));
+                
+                document.getElementById('days-selector').addEventListener('change', function() {
+                    if (this.value === 'custom') {
+                        document.getElementById('custom-range-section').style.display = 'block';
+                        const savedCustomRange = localStorage.getItem('customDateRange');
+                        if (savedCustomRange) {
+                            const ranges = JSON.parse(savedCustomRange);
+                            document.getElementById('custom-start-date').value = ranges.start;
+                            document.getElementById('custom-end-date').value = ranges.end;
+                            fetchCustomDateRange();
+                        }
                     } else {
+                        document.getElementById('custom-range-section').style.display = 'none';
+                        isCustomRange = false;
+                        localStorage.removeItem('customDateRange');
                         fetchHistoricalData();
                     }
                 });
-            }
-            
-            // Check if custom date range was saved
-            const savedCustomRange = localStorage.getItem('customDateRange');
-            if (savedCustomRange) {
-                const ranges = JSON.parse(savedCustomRange);
-                document.getElementById('custom-start-date').value = ranges.start;
-                document.getElementById('custom-end-date').value = ranges.end;
-                document.getElementById('days-selector').value = 'custom';
-                document.getElementById('custom-range-section').style.display = 'block';
-                isCustomRange = true;
-                fetchCustomDateRange();
-            } else {
-                fetchHistoricalData();
+                
+                const colorPicker = document.getElementById('line-color-picker');
+                if (colorPicker) {
+                    colorPicker.addEventListener('change', function() {
+                        localStorage.setItem('graphLineColor', this.value);
+                        if (isCustomRange) {
+                            fetchCustomDateRange();
+                        } else {
+                            fetchHistoricalData();
+                        }
+                    });
+                }
+                
+                const savedCustomRange = localStorage.getItem('customDateRange');
+                if (savedCustomRange) {
+                    const ranges = JSON.parse(savedCustomRange);
+                    document.getElementById('custom-start-date').value = ranges.start;
+                    document.getElementById('custom-end-date').value = ranges.end;
+                    document.getElementById('days-selector').value = 'custom';
+                    document.getElementById('custom-range-section').style.display = 'block';
+                    isCustomRange = true;
+                    fetchCustomDateRange();
+                } else {
+                    fetchHistoricalData();
+                }
             }
         }
         
@@ -910,12 +695,14 @@
             };
         }
 
-        async function fetchHistoricalData() {
+        
+        async function fetchHistoricalDataMulti(sensorId) {
             try {
-                // Get first sensor for historical data
-                const firstSensor = Object.keys(currentPageConfig.sensors)[0];
-                const sensorConfig = currentPageConfig.sensors[firstSensor];
-                const selectedDays = parseInt(document.getElementById('days-selector').value) || 1;
+                const sensorConfig = currentPageConfig.sensors[sensorId];
+                const daysSelector = document.querySelector(`select.days-selector-multi[data-sensorid="${sensorId}"]`);
+                const selectedDays = parseInt(daysSelector ? daysSelector.value : 1) || 1;
+                
+                console.log(`📊 Fetching chart data for sensor ${sensorId}:`, sensorConfig);
                 
                 const endDate = new Date();
                 const startDate = new Date(endDate.getTime() - (selectedDays * 24 * 60 * 60 * 1000));
@@ -923,7 +710,8 @@
                 const startStr = `${startDate.getUTCFullYear()}-${(startDate.getUTCMonth()+1).toString().padStart(2, '0')}-${startDate.getUTCDate().toString().padStart(2, '0')}%20${startDate.getUTCHours().toString().padStart(2, '0')}:${startDate.getUTCMinutes().toString().padStart(2, '0')}:${startDate.getUTCSeconds().toString().padStart(2, '0')}`;
                 const endStr = `${endDate.getUTCFullYear()}-${(endDate.getUTCMonth()+1).toString().padStart(2, '0')}-${endDate.getUTCDate().toString().padStart(2, '0')}%20${endDate.getUTCHours().toString().padStart(2, '0')}:${endDate.getUTCMinutes().toString().padStart(2, '0')}:${endDate.getUTCSeconds().toString().padStart(2, '0')}`;
                 
-                const url = `https://api.thingspeak.com/channels/${sensorConfig.channelID}/feeds.json?api_key=${sensorConfig.apiKey}&start=${startStr}&end=${endStr}&results=8000`;
+                const fieldNumber = sensorConfig.field.replace('field', '');
+                const url = `https://api.thingspeak.com/channels/${sensorConfig.channelID}/feeds.json?api_key=${sensorConfig.apiKey}&start=${startStr}&end=${endStr}&results=8000&fields=${fieldNumber}`;
                 
                 const response = await fetch(url, { cache: 'no-cache' });
                 if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
@@ -931,9 +719,10 @@
                 
                 if (!data || !data.feeds || data.feeds.length === 0) {
                     const dayText = selectedDays === 1 ? 'Day' : 'Days';
-                    document.getElementById('chart_update_time').innerText = `No data available in the last ${selectedDays} ${dayText}. Data collection may have started recently.`;
-                    ChartData.removeRows(0, ChartData.getNumberOfRows());
-                    Chart.draw(ChartData, getResponsiveChartOptions(`${currentPageConfig.displayName} - Water Level History (${selectedDays} ${dayText}) - No Data`, selectedDays));
+                    document.getElementById(`${sensorId}_chart_update_time`).innerText = `No data available in the last ${selectedDays} ${dayText}`;
+                    ChartsData[sensorId].removeRows(0, ChartsData[sensorId].getNumberOfRows());
+                    const sensorName = currentPageConfig.sensors[sensorId].displayName;
+                    Charts[sensorId].draw(ChartsData[sensorId], getResponsiveChartOptions(`${sensorName} - No Data`, selectedDays));
                     return;
                 }
                 
@@ -949,25 +738,32 @@
                     }
                 });
                 
-                ChartData.removeRows(0, ChartData.getNumberOfRows());
-                ChartData.addRows(Rows);
+                console.log(`📈 Chart rows created for ${sensorId}:`, Rows.length);
                 
-                const Options = getResponsiveChartOptions(`${currentPageConfig.displayName} - Water Level History (${selectedDays} ${dayText})`, selectedDays);
-                Chart.draw(ChartData, Options);
+                ChartsData[sensorId].removeRows(0, ChartsData[sensorId].getNumberOfRows());
+                ChartsData[sensorId].addRows(Rows);
+                
+                const sensorName = currentPageConfig.sensors[sensorId].displayName;
+                const Options = getResponsiveChartOptions(`${sensorName} - Water Level History`, selectedDays);
+                // Apply custom color if set
+                const customColor = localStorage.getItem(`graphLineColor_${sensorId}`);
+                if (customColor) {
+                    Options.colors = [customColor];
+                }
+                Charts[sensorId].draw(ChartsData[sensorId], Options);
                 
                 const currentTime = new Date().toLocaleTimeString();
-                document.getElementById('chart_update_time').innerText = `Chart updated: ${currentTime} • ${Rows.length} data points • ${selectedDays} ${dayText}`;
+                document.getElementById(`${sensorId}_chart_update_time`).innerText = `Updated: ${currentTime} • ${Rows.length} points • ${selectedDays} ${dayText}`;
                     
             } catch (error) {
-                console.error("Error fetching historical data:", error);
-                document.getElementById('chart_update_time').innerText = `Error loading chart data: ${error.message}`;
+                console.error(`❌ Error fetching historical data for ${sensorId}:`, error);
+                document.getElementById(`${sensorId}_chart_update_time`).innerText = `Error: ${error.message}`;
             }
         }
         
-        // Fetch data for custom date range (handles 8000 point limit by making multiple calls)
-        async function fetchCustomDateRange() {
-            const startInput = document.getElementById('custom-start-date').value;
-            const endInput = document.getElementById('custom-end-date').value;
+        async function fetchCustomDateRangeMulti(sensorId) {
+            const startInput = document.querySelector(`input.custom-start-date-multi[data-sensorid="${sensorId}"]`).value;
+            const endInput = document.querySelector(`input.custom-end-date-multi[data-sensorid="${sensorId}"]`).value;
             
             if (!startInput || !endInput) {
                 alert('Please select both start and end dates');
@@ -975,10 +771,9 @@
             }
             
             try {
-                document.getElementById('chart_update_time').innerText = 'Fetching data for custom range...';
+                document.getElementById(`${sensorId}_chart_update_time`).innerText = 'Fetching data...';
                 
-                const firstSensor = Object.keys(currentPageConfig.sensors)[0];
-                const sensorConfig = currentPageConfig.sensors[firstSensor];
+                const sensorConfig = currentPageConfig.sensors[sensorId];
                 const startDate = new Date(startInput);
                 const endDate = new Date(endInput);
                 
@@ -990,18 +785,16 @@
                 let allRows = [];
                 let currentStart = new Date(startDate);
                 
-                // Fetch data in chunks to handle 8000 point limit
                 while (currentStart < endDate) {
-                    // Calculate chunk end (7 days at a time to stay under 8000 points)
                     const chunkEnd = new Date(currentStart.getTime() + (7 * 24 * 60 * 60 * 1000));
                     const actualEnd = chunkEnd < endDate ? chunkEnd : endDate;
                     
                     const startStr = `${currentStart.getUTCFullYear()}-${(currentStart.getUTCMonth()+1).toString().padStart(2, '0')}-${currentStart.getUTCDate().toString().padStart(2, '0')}%20${currentStart.getUTCHours().toString().padStart(2, '0')}:${currentStart.getUTCMinutes().toString().padStart(2, '0')}:${currentStart.getUTCSeconds().toString().padStart(2, '0')}`;
                     const endStr = `${actualEnd.getUTCFullYear()}-${(actualEnd.getUTCMonth()+1).toString().padStart(2, '0')}-${actualEnd.getUTCDate().toString().padStart(2, '0')}%20${actualEnd.getUTCHours().toString().padStart(2, '0')}:${actualEnd.getUTCMinutes().toString().padStart(2, '0')}:${actualEnd.getUTCSeconds().toString().padStart(2, '0')}`;
                     
-                    const url = `https://api.thingspeak.com/channels/${sensorConfig.channelID}/feeds.json?api_key=${sensorConfig.apiKey}&start=${startStr}&end=${endStr}&results=8000`;
+                    const fieldNumber = sensorConfig.field.replace('field', '');
+                    const url = `https://api.thingspeak.com/channels/${sensorConfig.channelID}/feeds.json?api_key=${sensorConfig.apiKey}&start=${startStr}&end=${endStr}&results=8000&fields=${fieldNumber}`;
                     
-                    console.log(`Fetching chunk from ${startStr} to ${endStr}`);
                     const response = await fetch(url, { cache: 'no-cache' });
                     if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
                     
@@ -1018,43 +811,191 @@
                         });
                     }
                     
-                    currentStart = new Date(actualEnd.getTime() + 1000); // Move to next chunk
+                    currentStart = new Date(actualEnd.getTime() + 1000);
                 }
                 
-                // Remove duplicates and sort by date
                 const uniqueRows = Array.from(new Set(allRows.map(r => r[0].getTime())))
                     .map(time => allRows.find(r => r[0].getTime() === time))
                     .sort((a, b) => a[0] - b[0]);
                 
                 if (uniqueRows.length === 0) {
-                    document.getElementById('chart_update_time').innerText = 'No data found for the selected date range';
+                    document.getElementById(`${sensorId}_chart_update_time`).innerText = 'No data found';
                     return;
                 }
                 
-                // Save custom range to localStorage
+                ChartsData[sensorId].removeRows(0, ChartsData[sensorId].getNumberOfRows());
+                ChartsData[sensorId].addRows(uniqueRows);
+                
+                const sensorName = currentPageConfig.sensors[sensorId].displayName;
+                const Options = getResponsiveChartOptions(`${sensorName} - Custom Range`, 1);
+                // Apply custom color if set
+                const customColor = localStorage.getItem(`graphLineColor_${sensorId}`);
+                if (customColor) {
+                    Options.colors = [customColor];
+                }
+                Charts[sensorId].draw(ChartsData[sensorId], Options);
+                
+                const currentTime = new Date().toLocaleTimeString();
+                document.getElementById(`${sensorId}_chart_update_time`).innerText = 
+                    `Updated: ${currentTime} • ${uniqueRows.length} points`;
+                    
+            } catch (error) {
+                console.error(`Error for ${sensorId}:`, error);
+                document.getElementById(`${sensorId}_chart_update_time`).innerText = `Error: ${error.message}`;
+            }
+        }
+        
+        async function fetchHistoricalData() {
+            try {
+                const firstSensor = Object.keys(currentPageConfig.sensors)[0];
+                const sensorConfig = currentPageConfig.sensors[firstSensor];
+                const selectedDays = parseInt(document.getElementById('days-selector').value) || 1;
+                
+                console.log('📊 Fetching chart data for sensor:', firstSensor, sensorConfig);
+                
+                const endDate = new Date();
+                const startDate = new Date(endDate.getTime() - (selectedDays * 24 * 60 * 60 * 1000));
+                
+                const startStr = `${startDate.getUTCFullYear()}-${(startDate.getUTCMonth()+1).toString().padStart(2, '0')}-${startDate.getUTCDate().toString().padStart(2, '0')}%20${startDate.getUTCHours().toString().padStart(2, '0')}:${startDate.getUTCMinutes().toString().padStart(2, '0')}:${startDate.getUTCSeconds().toString().padStart(2, '0')}`;
+                const endStr = `${endDate.getUTCFullYear()}-${(endDate.getUTCMonth()+1).toString().padStart(2, '0')}-${endDate.getUTCDate().toString().padStart(2, '0')}%20${endDate.getUTCHours().toString().padStart(2, '0')}:${endDate.getUTCMinutes().toString().padStart(2, '0')}:${endDate.getUTCSeconds().toString().padStart(2, '0')}`;
+                
+                const fieldNumber = sensorConfig.field.replace('field', '');
+                const url = `https://api.thingspeak.com/channels/${sensorConfig.channelID}/feeds.json?api_key=${sensorConfig.apiKey}&start=${startStr}&end=${endStr}&results=8000&fields=${fieldNumber}`;
+                
+                console.log('📍 Request URL:', url);
+                
+                const response = await fetch(url, { cache: 'no-cache' });
+                console.log('📡 Response status:', response.status);
+                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+                const data = await response.json();
+                
+                console.log('📦 Data received:', data);
+                
+                if (!data || !data.feeds || data.feeds.length === 0) {
+                    const dayText = selectedDays === 1 ? 'Day' : 'Days';
+                    document.getElementById('chart_update_time').innerText = `No data available in the last ${selectedDays} ${dayText}`;
+                    ChartData.removeRows(0, ChartData.getNumberOfRows());
+                    Chart.draw(ChartData, getResponsiveChartOptions(`${currentPageConfig.displayName} - No Data`, selectedDays));
+                    return;
+                }
+                
+                const dayText = selectedDays === 1 ? 'Day' : 'Days';
+                const Rows = [];
+                
+                console.log('🔍 First feed sample:', data.feeds[0]);
+                console.log('🔍 Looking for field number:', fieldNumber);
+                console.log('🔍 First feed field value:', data.feeds[0][fieldNumber]);
+                
+                data.feeds.forEach(feed => {
+                    const date = new Date(feed.created_at);
+                    const Value = feed[sensorConfig.field] ? parseFloat(feed[sensorConfig.field]) : null;
+                    if (Value !== null) {
+                        const Tooltip = `${date.toLocaleDateString()} ${date.toLocaleTimeString()} - Level: ${Math.round(Value)} cm`;
+                        Rows.push([date, Value, Tooltip]);
+                    }
+                });
+                
+                console.log('📈 Chart rows created:', Rows.length);
+                
+                ChartData.removeRows(0, ChartData.getNumberOfRows());
+                ChartData.addRows(Rows);
+                
+                const Options = getResponsiveChartOptions(`${currentPageConfig.displayName} - Water Level History`, selectedDays);
+                Chart.draw(ChartData, Options);
+                
+                const currentTime = new Date().toLocaleTimeString();
+                document.getElementById('chart_update_time').innerText = `Updated: ${currentTime} • ${Rows.length} points • ${selectedDays} ${dayText}`;
+                    
+            } catch (error) {
+                console.error("❌ Error fetching historical data:", error);
+                document.getElementById('chart_update_time').innerText = `Error: ${error.message}`;
+            }
+        }
+        
+        async function fetchCustomDateRange() {
+            const startInput = document.getElementById('custom-start-date').value;
+            const endInput = document.getElementById('custom-end-date').value;
+            
+            if (!startInput || !endInput) {
+                alert('Please select both start and end dates');
+                return;
+            }
+            
+            try {
+                document.getElementById('chart_update_time').innerText = 'Fetching data...';
+                
+                const firstSensor = Object.keys(currentPageConfig.sensors)[0];
+                const sensorConfig = currentPageConfig.sensors[firstSensor];
+                const startDate = new Date(startInput);
+                const endDate = new Date(endInput);
+                
+                if (startDate >= endDate) {
+                    alert('Start date must be before end date');
+                    return;
+                }
+                
+                let allRows = [];
+                let currentStart = new Date(startDate);
+                
+                while (currentStart < endDate) {
+                    const chunkEnd = new Date(currentStart.getTime() + (7 * 24 * 60 * 60 * 1000));
+                    const actualEnd = chunkEnd < endDate ? chunkEnd : endDate;
+                    
+                    const startStr = `${currentStart.getUTCFullYear()}-${(currentStart.getUTCMonth()+1).toString().padStart(2, '0')}-${currentStart.getUTCDate().toString().padStart(2, '0')}%20${currentStart.getUTCHours().toString().padStart(2, '0')}:${currentStart.getUTCMinutes().toString().padStart(2, '0')}:${currentStart.getUTCSeconds().toString().padStart(2, '0')}`;
+                    const endStr = `${actualEnd.getUTCFullYear()}-${(actualEnd.getUTCMonth()+1).toString().padStart(2, '0')}-${actualEnd.getUTCDate().toString().padStart(2, '0')}%20${actualEnd.getUTCHours().toString().padStart(2, '0')}:${actualEnd.getUTCMinutes().toString().padStart(2, '0')}:${actualEnd.getUTCSeconds().toString().padStart(2, '0')}`;
+                    
+                    const fieldNumber = sensorConfig.field.replace('field', '');
+                    const url = `https://api.thingspeak.com/channels/${sensorConfig.channelID}/feeds.json?api_key=${sensorConfig.apiKey}&start=${startStr}&end=${endStr}&results=8000&fields=${fieldNumber}`;
+                    
+                    const response = await fetch(url, { cache: 'no-cache' });
+                    if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+                    
+                    const data = await response.json();
+                    
+                    if (data && data.feeds && data.feeds.length > 0) {
+                        data.feeds.forEach(feed => {
+                            const date = new Date(feed.created_at);
+                            const Value = feed[sensorConfig.field] ? parseFloat(feed[sensorConfig.field]) : null;
+                            if (Value !== null) {
+                                const Tooltip = `${date.toLocaleDateString()} ${date.toLocaleTimeString()} - Level: ${Math.round(Value)} cm`;
+                                allRows.push([date, Value, Tooltip]);
+                            }
+                        });
+                    }
+                    
+                    currentStart = new Date(actualEnd.getTime() + 1000);
+                }
+                
+                const uniqueRows = Array.from(new Set(allRows.map(r => r[0].getTime())))
+                    .map(time => allRows.find(r => r[0].getTime() === time))
+                    .sort((a, b) => a[0] - b[0]);
+                
+                if (uniqueRows.length === 0) {
+                    document.getElementById('chart_update_time').innerText = 'No data found';
+                    return;
+                }
+                
                 localStorage.setItem('customDateRange', JSON.stringify({
                     start: startInput,
                     end: endInput
                 }));
                 isCustomRange = true;
                 
-                // Update Chart
                 ChartData.removeRows(0, ChartData.getNumberOfRows());
                 ChartData.addRows(uniqueRows);
                 
-                const Options = getResponsiveChartOptions(`${currentPageConfig.displayName} - Water Level History (Custom Range)`, 1);
+                const Options = getResponsiveChartOptions(`${currentPageConfig.displayName} - Custom Range`, 1);
                 Chart.draw(ChartData, Options);
                 
                 const currentTime = new Date().toLocaleTimeString();
                 document.getElementById('chart_update_time').innerText = 
-                    `Chart updated: ${currentTime} • ${uniqueRows.length} data points • Custom range: ${startDate.toLocaleDateString()} to ${endDate.toLocaleDateString()}`;
+                    `Updated: ${currentTime} • ${uniqueRows.length} points`;
                     
             } catch (error) {
-                console.error("Error fetching custom date range:", error);
+                console.error("Error:", error);
                 document.getElementById('chart_update_time').innerText = `Error: ${error.message}`;
             }
         }
     </script>
 </body>
 </html>
-
