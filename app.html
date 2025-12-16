@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-i18n="app_title">IITMZ Water Management</title>
+    <title data-i18n="app_title">IIT Madras Water Management</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700">
-    <link rel="icon" href="IITMZ_Logo.ico" type="image/x-icon">
-    <link rel="manifest" href="/IITMZ_WDN/manifest.json">
+    <link rel="icon" href="IIT_Madras_Logo.ico" type="image/x-icon">
+    <link rel="manifest" href="/IITM-LVL-DSPLY-RT-MON/manifest.json">
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script src="config.js"></script>
     <script src="translation-manager.js"></script>
@@ -15,7 +15,7 @@
             font-family: 'Open Sans', sans-serif;
             font-size: 18px;
             text-align: center;
-            background-image: url('IITMZ.jpg');
+            background-image: url('IITM_bg.jpg');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -558,8 +558,8 @@
             if (localStorage.getItem('notificationsEnabled') === 'true' && 'Notification' in window) {
                 if (Notification.permission === 'granted') {
                     new Notification(title, {
-                        icon: 'IITMZ_Logo_192.png',
-                        badge: 'IITMZ_Logo.ico',
+                        icon: 'IIT_Madras_Logo_192.png',
+                        badge: 'IIT_Madras_Logo.ico',
                         ...options
                     });
                 }
@@ -1057,3 +1057,4 @@
     </script>
 </body>
 </html>
+
