@@ -1,11 +1,6 @@
 {
   "app_title": "إدارة مياه IIT مدراس",
   "select_tank_sump": "اختر خزان/بئر",
-  "main_sump": "البئر الرئيسي",
-  "pampa_sump": "بئر بامبا",
-  "mandakini_sump": "بئر ماندكيني",
-  "icsr_sump": "بئر ICSR",
-  "himalaya_oht": "خزان الهيمالايا العلوي",
   "install_app": "تثبيت التطبيق",
   "back": "رجوع",
   "water_level_monitoring": "إدارة مياه IIT مدراس",
@@ -35,5 +30,16 @@
   "enable_alerts": "تفعيل التنبيهات",
   "repeat_alerts": "تكرار التنبيهات (كل 5 دقائق)",
   "min_threshold": "الحد الأدنى",
-  "max_threshold": "الحد الأقصى"
+  "max_threshold": "الحد الأقصى",
+  "page_main_sump": "حوض التصريف الرئيسي",
+  "sensor_main_sump_Main Sump": "حوض التصريف الرئيسي",
+  "page_pampa": "مستنقع بامبا",
+  "sensor_pampa_Pampa Sump": "مستنقع بامبا",
+  "page_himalaya": "هيمالايا أو إتش تي",
+  "sensor_himalaya_Himalaya OHT": "هيمالايا أو إتش تي",
+  "page_mandakini": "حوض مانداكيني",
+  "sensor_mandakini_Mandakini Sump": "حوض مانداكيني",
+  "page_ICSR": "ICSR",
+  "sensor_ICSR_ICSR_1": "حوض ICSR",
+  "sensor_ICSR_ICSR_2": "ICSR OHT"
 }

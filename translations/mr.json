@@ -1,11 +1,6 @@
 {
   "app_title": "IIT मद्रास जल व्यवस्थापन",
   "select_tank_sump": "टाकी/सम्प निवडा",
-  "main_sump": "मुख्य सम्प",
-  "pampa_sump": "पंपा सम्प",
-  "mandakini_sump": "मंडाकिनी सम्प",
-  "icsr_sump": "ICSR सम्प",
-  "himalaya_oht": "हिमालय OHT",
   "install_app": "अॅप इंस्टॉल करा",
   "back": "परत",
   "water_level_monitoring": "IIT Madras जल व्यवस्थापन",
@@ -35,5 +30,16 @@
   "enable_alerts": "सतर्कता सक्षम करा",
   "repeat_alerts": "सतर्कता पुनरावृत्ती करा (प्रत्येक 5 मिनिटाला)",
   "min_threshold": "किमान",
-  "max_threshold": "कमाल"
+  "max_threshold": "कमाल",
+  "page_main_sump": "मेन संप",
+  "sensor_main_sump_Main Sump": "मेन संप",
+  "page_pampa": "पंपा संप",
+  "sensor_pampa_Pampa Sump": "पंपा संप",
+  "page_himalaya": "हिमालय ओएचटी",
+  "sensor_himalaya_Himalaya OHT": "हिमालय ओएचटी",
+  "page_mandakini": "मंदाकिनी संप",
+  "sensor_mandakini_Mandakini Sump": "मंदाकिनी संप",
+  "page_ICSR": "आयसीएसआर",
+  "sensor_ICSR_ICSR_1": "आयसीएसआर संप",
+  "sensor_ICSR_ICSR_2": "आयसीएसआर ओएचटी"
 }

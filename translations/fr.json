@@ -1,11 +1,6 @@
 {
   "app_title": "Gestion de l'Eau IIT Madras",
   "select_tank_sump": "Sélectionner le Réservoir/Puisard",
-  "main_sump": "Puisard Principal",
-  "pampa_sump": "Puisard Pampa",
-  "mandakini_sump": "Puisard Mandakini",
-  "icsr_sump": "Puisard ICSR",
-  "himalaya_oht": "Himalaya OHT",
   "install_app": "Installer l'Application",
   "back": "Retour",
   "water_level_monitoring": "Gestion de l'Eau IIT Madras",
@@ -35,5 +30,16 @@
   "enable_alerts": "Activer les Alertes",
   "repeat_alerts": "Répéter les Alertes (toutes les 5 min)",
   "min_threshold": "Min",
-  "max_threshold": "Max"
+  "max_threshold": "Max",
+  "page_main_sump": "puisard principal",
+  "sensor_main_sump_Main Sump": "puisard principal",
+  "page_pampa": "Puits de Pampa",
+  "sensor_pampa_Pampa Sump": "Puits de Pampa",
+  "page_himalaya": "Himalaya OHT",
+  "sensor_himalaya_Himalaya OHT": "Himalaya OHT",
+  "page_mandakini": "Bassin de Mandakini",
+  "sensor_mandakini_Mandakini Sump": "Bassin de Mandakini",
+  "page_ICSR": "ICSR",
+  "sensor_ICSR_ICSR_1": "Souche ICSR",
+  "sensor_ICSR_ICSR_2": "ICSR OHT"
 }

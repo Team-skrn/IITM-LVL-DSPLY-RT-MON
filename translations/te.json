@@ -1,11 +1,6 @@
 {
   "app_title": "ఐ ఐ టి మద్రాసు నీటి నిర్వహణ",
   "select_tank_sump": "ట్యాంక్/సంపు ఎంచుకోండి",
-  "main_sump": "ప్రధాన సంపు",
-  "pampa_sump": "పంపా సంపు",
-  "mandakini_sump": "మండాకిని సంపు",
-  "icsr_sump": "ICSR సంపు",
-  "himalaya_oht": "హిమాలయ OHT",
   "install_app": "యాప్‌ను ఇన్‌స్టాల్ చేయండి",
   "back": "వెనుకకు",
   "water_level_monitoring": "ఐ ఐ టి మద్రాసు నీటి నిర్వహణ",
@@ -35,5 +30,16 @@
   "enable_alerts": "అలర్ట్‌లను ప్రారంభించండి",
   "repeat_alerts": "అలర్ట్‌లను పునరావృత్తి చేయండి (ప్రతి 5 నిమిషాలకు)",
   "min_threshold": "కనిష్టం",
-  "max_threshold": "గరిష్టం"
+  "max_threshold": "గరిష్టం",
+  "page_main_sump": "ప్రధాన సంప్",
+  "sensor_main_sump_Main Sump": "ప్రధాన సంప్",
+  "page_pampa": "పంపా సంప్",
+  "sensor_pampa_Pampa Sump": "పంపా సంప్",
+  "page_himalaya": "హిమాలయ OHT",
+  "sensor_himalaya_Himalaya OHT": "హిమాలయ OHT",
+  "page_mandakini": "మందాకిని సంప్",
+  "sensor_mandakini_Mandakini Sump": "మందాకిని సంప్",
+  "page_ICSR": "ఐసిఎస్ఆర్",
+  "sensor_ICSR_ICSR_1": "ICSR సంప్",
+  "sensor_ICSR_ICSR_2": "ICSR OHT"
 }

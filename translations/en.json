@@ -1,11 +1,6 @@
 {
   "app_title": "IIT Madras Water Management",
   "select_tank_sump": "Select the Tank/Sump",
-  "main_sump": "Main Sump",
-  "pampa_sump": "Pampa Sump",
-  "mandakini_sump": "Mandakini Sump",
-  "icsr_sump": "ICSR Sump",
-  "himalaya_oht": "Himalaya OHT",
   "install_app": "Install App",
   "back": "Back",
   "water_level_monitoring": "IIT Madras Water Management",
@@ -35,5 +30,16 @@
   "enable_alerts": "Enable Alerts",
   "repeat_alerts": "Repeat Alerts (every 5 min)",
   "min_threshold": "Min",
-  "max_threshold": "Max"
+  "max_threshold": "Max",
+  "page_main_sump": "Main Sump",
+  "sensor_main_sump_Main Sump": "Main Sump",
+  "page_pampa": "Pampa Sump",
+  "sensor_pampa_Pampa Sump": "Pampa Sump",
+  "page_himalaya": "Himalaya OHT",
+  "sensor_himalaya_Himalaya OHT": "Himalaya OHT",
+  "page_mandakini": "Mandakini Sump",
+  "sensor_mandakini_Mandakini Sump": "Mandakini Sump",
+  "page_ICSR": "ICSR",
+  "sensor_ICSR_ICSR_1": "ICSR Sump",
+  "sensor_ICSR_ICSR_2": "ICSR OHT"
 }

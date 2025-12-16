@@ -1,11 +1,6 @@
 {
   "app_title": "ஐஐடி மெட்ராஸ் நீர் மேலாண்மை",
   "select_tank_sump": "தொட்டி/சம்ப் தேர்வு செய்யவும்",
-  "main_sump": "முக்கிய தொட்டி",
-  "pampa_sump": "பம்பா தொட்டி",
-  "mandakini_sump": "மண்டாகிணி தொட்டி",
-  "icsr_sump": "ICSR தொட்டி",
-  "himalaya_oht": "இமாலய OHT",
   "install_app": "பயன்பாட்டை நிறுவுங்கள்",
   "back": "பின்",
   "water_level_monitoring": "ஐஐடி மெட்ராஸ் நீர் மேலாண்மை",
@@ -35,6 +30,16 @@
   "enable_alerts": "எச்சரிக்கைகளை இயக்கு",
   "repeat_alerts": "எச்சரிக்கைகளை மீண்டும் செய் (ஒவ்வொரு 5 நிமிடத்திற்கும்)",
   "min_threshold": "குறைந்தபட்சம்",
-  "max_threshold": "அதிகபட்சம்"
-
+  "max_threshold": "அதிகபட்சம்",
+  "page_main_sump": "பிரதான சம்ப்",
+  "sensor_main_sump_Main Sump": "பிரதான சம்ப்",
+  "page_pampa": "பம்பா சம்ப்",
+  "sensor_pampa_Pampa Sump": "பம்பா சம்ப்",
+  "page_himalaya": "இமயமலை OHT",
+  "sensor_himalaya_Himalaya OHT": "இமயமலை OHT",
+  "page_mandakini": "மந்தாகினி சம்ப்",
+  "sensor_mandakini_Mandakini Sump": "மந்தாகினி சம்ப்",
+  "page_ICSR": "ஐ.சி.எஸ்.ஆர்.",
+  "sensor_ICSR_ICSR_1": "ஐசிஎஸ்ஆர் சம்ப்",
+  "sensor_ICSR_ICSR_2": "ஐ.சி.எஸ்.ஆர் ஓ.எச்.டி."
 }
