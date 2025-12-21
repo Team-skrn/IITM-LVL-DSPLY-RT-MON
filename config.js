@@ -102,12 +102,31 @@ const appConfig = {
         "ICSR_2": {
           "displayName": "ICSR OHT",
           "channelID": "2511342",
-          "apiKey": "IFAV1XCYUFW5Y478",
+          "apiKey": "IFAV1XCYUFW5Y479",
           "field": "field6",
           "isInteger": true,
           "limits": {
             "warning": 50,
             "danger": 30
+          }
+        }
+      }
+    },
+    "C2_Sump": {
+      "id": "C2_Sump",
+      "displayName": "C2 Sump",
+      "title": "C2 Sump Water Level Monitoring",
+      "icon": "",
+      "sensors": {
+        "C2 Sump": {
+          "displayName": "C2 Sump",
+          "channelID": "2177700",
+          "apiKey": "9OY9NTLLOW1NHUXZ",
+          "field": "field1",
+          "isInteger": true,
+          "limits": {
+            "warning": 100,
+            "danger": 50
           }
         }
       }
