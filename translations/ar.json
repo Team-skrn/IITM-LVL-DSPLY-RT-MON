@@ -43,5 +43,8 @@
   "sensor_ICSR_ICSR_1": "حوض ICSR",
   "sensor_ICSR_ICSR_2": "ICSR OHT",
   "page_C2_Sump": "حوض الزيت C2",
-  "sensor_C2_Sump_C2 Sump": "حوض الزيت C2"
+  "sensor_C2_Sump_C2_Sump": "حوض الزيت C2",
+  "page_NAC_2": "NAC 2",
+  "sensor_NAC_2_NAC2_Grey": "مياه رمادية NAC 2",
+  "sensor_NAC_2_NAC2_Metro": "مياه مترو NAC 2"
 }

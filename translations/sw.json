@@ -43,5 +43,8 @@
   "sensor_ICSR_ICSR_1": "Sump ya ICSR",
   "sensor_ICSR_ICSR_2": "ICSR OHT",
   "page_C2_Sump": "C2 Sump",
-  "sensor_C2_Sump_C2 Sump": "C2 Sump"
+  "sensor_C2_Sump_C2_Sump": "C2 Sump",
+  "page_NAC_2": "NAC 2",
+  "sensor_NAC_2_NAC2_Grey": "Maji ya Kijivu ya NAC 2",
+  "sensor_NAC_2_NAC2_Metro": "Maji ya Metro ya NAC 2"
 }

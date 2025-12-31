@@ -42,6 +42,9 @@
   "page_ICSR": "आईसीएसआर",
   "sensor_ICSR_ICSR_1": "आईसीएसआर सम्प",
   "sensor_ICSR_ICSR_2": "आईसीएसआर ओएचटी",
-  "page_C2_Sump": "C2 सम्प",
-  "sensor_C2_Sump_C2 Sump": "C2 सम्प"
+  "page_C2_Sump": "C2 नाली",
+  "sensor_C2_Sump_C2_Sump": "C2 नाली",
+  "page_NAC_2": "एनएसी 2",
+  "sensor_NAC_2_NAC2_Grey": "एनएसी 2 ग्रे वाटर",
+  "sensor_NAC_2_NAC2_Metro": "एनएसी 2 मेट्रो वाटर"
 }

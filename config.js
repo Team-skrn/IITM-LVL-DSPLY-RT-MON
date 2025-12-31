@@ -3,7 +3,7 @@
  */
 
 const appConfig = {
-  "appTitle": "IITMZ Water Management",
+  "appTitle": "IITM Water Management",
   "defaultLanguage": "en",
   "pages": {
     "main_sump": {
@@ -118,11 +118,41 @@ const appConfig = {
       "title": "C2 Sump Water Level Monitoring",
       "icon": "",
       "sensors": {
-        "C2 Sump": {
+        "C2_Sump": {
           "displayName": "C2 Sump",
           "channelID": "2177700",
           "apiKey": "9OY9NTLLOW1NHUXZ",
           "field": "field1",
+          "isInteger": true,
+          "limits": {
+            "warning": 100,
+            "danger": 50
+          }
+        }
+      }
+    },
+    "NAC_2": {
+      "id": "NAC_2",
+      "displayName": "NAC 2",
+      "title": "NAC 2 Water Level Monitoring",
+      "icon": "",
+      "sensors": {
+        "NAC2_Grey": {
+          "displayName": "NAC 2 Grey Water",
+          "channelID": "3216774",
+          "apiKey": "KGC4A4F0EESD4RR0",
+          "field": "field2",
+          "isInteger": true,
+          "limits": {
+            "warning": 100,
+            "danger": 50
+          }
+        },
+        "NAC2_Metro": {
+          "displayName": "NAC 2 Metro Water",
+          "channelID": "3216774",
+          "apiKey": "KGC4A4F0EESD4RR0",
+          "field": "field5",
           "isInteger": true,
           "limits": {
             "warning": 100,
