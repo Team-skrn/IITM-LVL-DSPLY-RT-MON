@@ -45,6 +45,6 @@
   "page_C2_Sump": "C2 સમ્પ",
   "sensor_C2_Sump_C2_Sump": "C2 સમ્પ",
   "page_NAC_2": "એનએસી 2",
-  "sensor_NAC_2_NAC2_Grey": "NAC 2 ગ્રે વોટર",
-  "sensor_NAC_2_NAC2_Metro": "NAC 2 મેટ્રો પાણી"
+  "sensor_NAC_2_NAC2_Grey": "NAC 2 ગ્રે વોટર OHT",
+  "sensor_NAC_2_NAC2_Metro": "NAC 2 મેટ્રો વોટર OHT"
 }

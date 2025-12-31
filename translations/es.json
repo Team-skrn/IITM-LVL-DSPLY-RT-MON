@@ -45,6 +45,6 @@
   "page_C2_Sump": "Cárter C2",
   "sensor_C2_Sump_C2_Sump": "Cárter C2",
   "page_NAC_2": "NAC 2",
-  "sensor_NAC_2_NAC2_Grey": "NAC 2 Aguas grises",
-  "sensor_NAC_2_NAC2_Metro": "NAC 2 Metro Agua"
+  "sensor_NAC_2_NAC2_Grey": "NAC 2 Aguas grises OHT",
+  "sensor_NAC_2_NAC2_Metro": "NAC 2 Metro Water OHT"
 }
