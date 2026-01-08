@@ -102,7 +102,7 @@ const appConfig = {
         "ICSR_2": {
           "displayName": "ICSR OHT",
           "channelID": "2511342",
-          "apiKey": "IFAV1XCYUFW5Y479",
+          "apiKey": "IFAV1XCYUFW5Y478",
           "field": "field6",
           "isInteger": true,
           "limits": {
